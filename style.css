@@ -1,0 +1,1114 @@
+/* ==========================================
+   🌐 GLOBAL RESET & CYBERCORE BASE STYLES
+   ========================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    height: auto !important;
+    background-color: #030611;
+    color: #ffffff;
+}
+
+/* Custom Webkit Scrollbar Matrix */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #070d1e;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0052cc;
+    border: 2px solid #070d1e;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #FFD700;
+}
+
+/* Ambient Glowing Background Orbs */
+.glowing-bg-orbs {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.12;
+}
+
+.orb-1 {
+    width: 600px;
+    height: 600px;
+    background: #002060;
+    top: -100px;
+    right: -100px;
+}
+
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    background: #FFD700;
+    top: 60vh;
+    left: -150px;
+}
+
+/* ==========================================
+   ⚡ SYSTEM PREMIUM PRELOADER MATRIX
+   ========================================== */
+#cyber-preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #020409;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-matrix-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(0, 32, 96, 0.05) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(0, 32, 96, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: matrixScroll 12s infinite linear;
+}
+
+@keyframes matrixScroll {
+    from { background-position: 0 0; }
+    to { background-position: 0 360px; }
+}
+
+.loader-core-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 250px;
+    z-index: 5;
+}
+
+.hologram-scanner-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px dashed #002060;
+    border-top-color: #FFD700;
+    border-bottom-color: #00ff66;
+    border-radius: 50%;
+    animation: spinRing 2s infinite linear;
+    box-shadow: 0 0 30px rgba(0, 32, 96, 0.5);
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+.loader-percentage {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+}
+
+.loader-status-log {
+    position: absolute;
+    bottom: -40px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #6a7b9c;
+    text-transform: uppercase;
+}
+
+.loader-terminal-overlay {
+    position: absolute;
+    bottom: 30px;
+    font-family: monospace;
+    font-size: 11px;
+    color: rgba(0, 255, 102, 0.6);
+    text-align: center;
+    line-height: 1.8;
+}
+
+/* ==========================================
+   🛡️ NAVIGATION BAR COMPONENT
+   ========================================== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 80px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    background: rgba(3, 6, 17, 0.8);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #ffffff;
+}
+
+.vs-nav-tag {
+    color: #FFD700;
+    font-size: 14px;
+    margin-left: 8px;
+    font-weight: 600;
+}
+
+.logo-shield {
+    width: 20px;
+    height: 20px;
+    background-color: #FFD700;
+    margin-right: 12px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    box-shadow: 0 0 15px #FFD700;
+}
+
+.nav-right-elements {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.broadcast-status {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00ff66;
+    border-radius: 50%;
+    animation: pulseGlow 1.5s infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { transform: scale(0.9); opacity: 0.4; }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px #00ff66; }
+}
+
+#admin-menu-btn {
+    font-size: 22px;
+    color: #ffffff;
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#admin-menu-btn:hover {
+    background: #FFD700;
+    color: #030611;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+    transform: scale(1.05);
+}
+
+/* ==========================================
+   🎛️ SLIDING CYBER SECURITY SIDEBAR
+   ========================================== */
+#admin-sidebar {
+    position: fixed;
+    top: 0;
+    right: -480px;
+    width: 450px;
+    height: 100vh;
+    background: rgba(6, 11, 26, 0.85);
+    backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
+    border-left: 1px solid rgba(255, 215, 0, 0.2);
+    z-index: 99999;
+    box-shadow: -15px 0 40px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.sidebar-header h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+#admin-close-btn {
+    font-size: 20px;
+    color: #6a7b9c;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+#admin-close-btn:hover {
+    color: #ff3333;
+}
+
+/* Auth Gate Matrix Screen */
+#admin-auth-screen {
+    padding: 40px 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.lock-icon-wrapper {
+    font-size: 45px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));
+}
+
+#admin-auth-screen p {
+    color: #8fa0c2;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.password-field-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.password-field-wrapper input {
+    padding: 15px;
+    background: #030611;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.password-field-wrapper input:focus {
+    border-color: #FFD700;
+    outline: none;
+}
+
+.password-field-wrapper button {
+    padding: 15px;
+    background: #002060;
+    color: white;
+    border: 1px solid #FFD700;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.password-field-wrapper button:hover {
+    background: #FFD700;
+    color: #030611;
+    box-shadow: 0 5px 15px rgba(255,215,0,0.2);
+}
+
+#auth-error-msg {
+    margin-top: 15px;
+    font-size: 13px !important;
+    color: #ff3333 !important;
+    font-weight: 700;
+}
+
+/* Scrollable Admin Panels Core */
+#admin-controls-content {
+    box-sizing: border-box;
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+#admin-controls-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+#admin-controls-content::-webkit-scrollbar-thumb {
+    background: rgba(255,215,0,0.2);
+    border-radius: 10px;
+}
+
+/* ==========================================
+   🚀 HERO GRAPHICS POWER HOUSE
+   ========================================== */
+.hero-section {
+    min-height: 85vh;
+    max-height: 650px;
+    display: flex;
+    align-items: center;
+    padding: 120px 80px 40px 80px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.hero-grid-wrapper {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    width: 100%;
+    align-items: center;
+    gap: 50px;
+}
+
+.hero-tag {
+    color: #FFD700;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 3px;
+    display: inline-block;
+    margin-bottom: 20px;
+    border-left: 3px solid #002060;
+    padding-left: 10px;
+}
+
+.exploding-title {
+    font-size: 54px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -1.5px;
+    background: linear-gradient(180deg, #ffffff 0%, #a2b4dc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.exploding-letter {
+    display: inline-block;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.hero-content p {
+    color: #8fa0c2;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+/* ⚽ Holographic 3D Playground Container */
+.hero-animation-arena {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    background: radial-gradient(circle at center, rgba(7, 15, 41, 0.6) 0%, rgba(2, 4, 13, 0.98) 100%);
+    border: 1px solid rgba(0, 32, 96, 0.6);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 40px rgba(0, 32, 96, 0.3);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.arena-pulse-ring {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border: 1px dashed rgba(255, 215, 0, 0.08);
+    border-radius: 50%;
+    animation: rotateRing 40s infinite linear;
+    z-index: 2;
+    pointer-events: none;
+}
+
+@keyframes rotateRing {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#canvas-3d-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.skill-status-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(3, 6, 17, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid #FFD700;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #ffffff;
+    z-index: 10;
+}
+
+/* Global Section Header Standard */
+.section-title-wrapper {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title-wrapper h2 {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.section-title-wrapper p {
+    color: #6a7b9c;
+    font-size: 15px;
+}
+
+/* ==========================================
+   📺 OBS PREMIUM STREAM OVERLAY
+   ========================================== */
+.overlay-showcase-section {
+    padding: 80px;
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.03);
+}
+
+.master-scoreboard-overlay {
+    display: flex;
+    align-items: center;
+    background-color: #090e1a;
+    border: 2px solid #FFD700;
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    overflow: hidden;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+.ov-timer-box {
+    background-color: #FFD700;
+    color: #030611;
+    padding: 22px 35px;
+    font-size: 34px;
+    font-weight: 800;
+    text-align: center;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.ov-team {
+    display: flex;
+    align-items: center;
+    padding: 0 35px;
+    height: 80px;
+    flex: 1;
+}
+
+.team-home {
+    background: linear-gradient(90deg, #002060 0%, #0c3384 100%);
+    justify-content: flex-end;
+}
+
+.team-away {
+    background: linear-gradient(90deg, #161b26 0%, #0e121a 100%);
+    justify-content: flex-start;
+}
+
+.ov-team-name {
+    font-size: 21px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.ov-score {
+    font-size: 42px;
+    font-weight: 800;
+    color: #FFD700;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.team-home .ov-score {
+    margin-left: 35px;
+}
+
+.team-away .ov-score {
+    margin-right: 35px;
+}
+
+.ov-vs-badge {
+    background-color: #030611;
+    color: #526384;
+    font-size: 14px;
+    font-weight: 800;
+    padding: 0 15px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.ov-live-tag {
+    background-color: #ff2a2a;
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 0 20px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 1.5px;
+}
+
+.ov-live-tag span {
+    animation: flash 1.8s infinite;
+}
+
+@keyframes flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* ==========================================
+   👥 MARQUEE PLAYERS TRACKING METRIC
+   ========================================== */
+.player-stats-section {
+    padding: 60px 80px;
+    position: relative;
+    z-index: 1;
+}
+
+.player-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.player-card {
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.3) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.player-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 215, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+}
+
+.player-glow-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.card-rahula .player-glow-bar {
+    background: #002060;
+}
+
+.card-thomas .player-glow-bar {
+    background: #FFD700;
+}
+
+.player-meta {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.p-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    opacity: 0.2;
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.player-meta h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.p-team {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.team-r { color: #5286ff; }
+.team-t { color: #FFD700; }
+
+.player-stat-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.p-stat-line {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding-bottom: 8px;
+    font-size: 14px;
+    color: #8fa0c2;
+}
+
+.p-stat-line strong {
+    color: #ffffff;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+}
+
+/* ==========================================
+   📊 FIELD REALTIME DATA VISUALIZATION
+   ========================================== */
+.analytics-section {
+    padding: 60px 80px;
+}
+
+.analytics-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.01);
+    border: 1px solid rgba(255,255,255,0.03);
+    padding: 40px;
+    border-radius: 16px;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.stat-label {
+    color: #6a7b9c;
+    text-transform: uppercase;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.stat-bar-wrapper {
+    width: 100%;
+    height: 8px;
+    background-color: #161b26;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    width: 50%;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-home {
+    background: linear-gradient(90deg, #002060 0%, #FFD700 100%);
+}
+
+/* ==========================================
+   🎮 OPERATOR CONTROLS INTERNAL LAYOUTS
+   ========================================== */
+.deck-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-bottom: 30px;
+}
+
+.deck-card {
+    background: rgba(19, 27, 46, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.deck-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.text-gold { color: #FFD700; }
+.text-blue { color: #5286ff; }
+
+.deck-timer-display {
+    font-size: 52px;
+    font-weight: 800;
+    text-align: center;
+    background-color: #030611;
+    padding: 15px;
+    border-radius: 10px;
+    color: #FFD700;
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    margin-bottom: 20px;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.deck-btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.btn-go { background-color: #00cc66; color: white; }
+.btn-hold { background-color: #ffaa00; color: #030611; }
+.btn-clear { background-color: #ff3333; color: white; }
+
+.custom-time-setter {
+    display: flex;
+    gap: 10px;
+}
+
+.custom-time-setter input {
+    flex: 1;
+    padding: 12px;
+    background: #030611;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+}
+
+.custom-time-setter button {
+    background: #253354;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    color: #6a7b9c;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background-color: #030611;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: #002060;
+    color: white;
+    border: 1px solid #FFD700;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #FFD700;
+    color: #030611;
+}
+
+/* Internal Incrementor Matrix */
+.scoring-matrix-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+}
+
+.matrix-side h4 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #cbd5e1;
+    margin-bottom: 10px;
+}
+
+.matrix-score-num {
+    font-size: 64px;
+    font-weight: 800;
+    color: #FFD700;
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1;
+    margin-bottom: 15px;
+}
+
+.matrix-btn-pair {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-matrix-up {
+    background-color: #002060;
+    color: white;
+    border: 1px solid #FFD700;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-matrix-up:hover {
+    background-color: #FFD700;
+    color: #030611;
+}
+
+.btn-matrix-down {
+    background-color: #1e293b;
+    color: #cbd5e1;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.matrix-divider {
+    font-size: 18px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.15);
+    padding: 5px 0;
+    position: relative;
+}
+
+.matrix-divider::before, .matrix-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: rgba(255,255,255,0.06);
+}
+
+.matrix-divider::before { left: 0; }
+.matrix-divider::after { right: 0; }
+
+.telemetry-control-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tel-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.02);
+}
+
+.tel-row span {
+    font-size: 13px;
+    font-weight: 600;
+    color: #cbd5e1;
+}
+
+.tel-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.tel-actions button {
+    flex: 1;
+    background: #002060;
+    color: white;
+    border: 1px solid rgba(255,215,0,0.3);
+    padding: 8px 0;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.tel-actions button:hover {
+    background: #FFD700;
+    color: #030611;
+}
+
+.tel-actions .btn-tel-reset {
+    background: #334155;
+    border: none;
+    color: #94a3b8;
+    max-width: 80px;
+}
+
+/* ==========================================
+   🏁 FOOTER PORTAL SYSTEM
+   ========================================== */
+footer {
+    padding: 60px 80px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background-color: #02040a;
+    text-align: center;
+}
+
+.footer-logo {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+footer p {
+    color: #43516c;
+    font-size: 14px;
+}
+
+/* ==========================================
+   📱 ULTRA RESPONSIVE ADAPTER ENGINE
+   ========================================== */
+@media (max-width: 992px) {
+    header {
+        padding: 20px 40px;
+    }
+    
+    #admin-sidebar {
+        width: 100vw;
+        right: -105vw;
+    }
+    
+    .hero-section, 
+    .overlay-showcase-section, 
+    .player-stats-section, 
+    .analytics-section {
+        padding: 40px 20px;
+    }
+    
+    .hero-grid-wrapper, 
+    .player-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .exploding-title {
+        font-size: 38px;
+    }
+    
+    .hero-animation-arena {
+        height: 360px;
+    }
+    
+    .master-scoreboard-overlay {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .ov-timer-box, 
+    .ov-team, 
+    .ov-vs-badge, 
+    .ov-live-tag {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        justify-content: center;
+    }
+}

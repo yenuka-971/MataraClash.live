@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rahula vs St. Thomas' - Live Scoring Arena</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+    <div id="cyber-preloader">
+        <div class="loader-matrix-bg"></div>
+        <div class="loader-core-wrapper">
+            <div class="hologram-scanner-ring"></div>
+            <div id="load-pct" class="loader-percentage">00%</div>
+            <div id="load-log" class="loader-status-log">INITIALIZING SYSTEM...</div>
+        </div>
+        <div class="loader-terminal-overlay">SYSTEM CORE v2.6 // SECURE CLOUD DATABASE CHANNELS CONNECTED</div>
+    </div>
+
+    <div class="glowing-bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <div class="logo-shield"></div>
+            RAHULA WEB TEAM <span class="vs-nav-tag">vs ST. THOMAS'</span>
+        </div>
+        <div class="nav-right-elements">
+            <div class="broadcast-status">
+                <div class="pulse-dot"></div>
+                BIG MATCH DECK ACTIVE
+            </div>
+            <div id="admin-menu-btn">☰</div>
+        </div>
+    </header>
+
+    <nav id="admin-sidebar">
+        <div class="sidebar-header">
+            <h3>SECURE DECK MONITOR</h3>
+            <div id="admin-close-btn">✕</div>
+        </div>
+
+        <div id="admin-auth-screen">
+            <div class="lock-icon-wrapper">🔒</div>
+            <p>ENTER OPERATOR QUANTUM KEY TO ENGAGE THE REALTIME TRANSMISSION SYSTEM CONTROL DECK.</p>
+            <div class="password-field-wrapper">
+                <input type="password" id="admin-pass-input" placeholder="••••••••">
+                <button id="btn-auth-submit">VERIFY CREDENTIALS</button>
+            </div>
+            <div id="auth-error-msg"></div>
+        </div>
+
+        <div id="admin-controls-content" style="display: none;">
+            <div class="deck-grid">
+                <div class="deck-card">
+                    <h3 class="text-gold">⏱️ TELEMETRY CLOCK</h3>
+                    <div id="deck-timer-view" class="deck-timer-display">00:00</div>
+                    <div class="deck-btn-row">
+                        <button id="btn-start" class="btn btn-go">START</button>
+                        <button id="btn-pause" class="btn btn-hold">PAUSE</button>
+                        <button id="btn-reset" class="btn btn-clear">RESET</button>
+                    </div>
+                    <div class="custom-time-setter">
+                        <input type="number" id="input-custom-min" placeholder="Min" min="0">
+                        <button id="btn-set-time">SET</button>
+                    </div>
+                </div>
+
+                <div class="deck-card">
+                    <h3 class="text-blue">⚽ SCOREBOARD CORES</h3>
+                    <div class="scoring-matrix-wrapper">
+                        <div class="matrix-side">
+                            <h4 id="ctrl-home-label">HOME</h4>
+                            <div id="ctrl-home-score-view" class="matrix-score-num">0</div>
+                            <div class="matrix-btn-pair">
+                                <button id="btn-home-up" class="btn-matrix-up">+1</button>
+                                <button id="btn-home-down" class="btn-matrix-down">-1</button>
+                            </div>
+                        </div>
+                        <div class="matrix-divider">VS</div>
+                        <div class="matrix-side">
+                            <h4 id="ctrl-away-label">AWAY</h4>
+                            <div id="ctrl-away-score-view" class="matrix-score-num">0</div>
+                            <div class="matrix-btn-pair">
+                                <button id="btn-away-up" class="btn-matrix-up">+1</button>
+                                <button id="btn-away-down" class="btn-matrix-down">-1</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="deck-card">
+                    <h3>⚙️ TEAM IDENTITIES</h3>
+                    <div class="form-group">
+                        <label>Home Team Core</label>
+                        <input type="text" id="input-home-name" value="RAHULA COLLEGE">
+                    </div>
+                    <div class="form-group">
+                        <label>Away Team Core</label>
+                        <input type="text" id="input-away-name" value="ST. THOMAS' COLLEGE">
+                    </div>
+                    <button id="btn-update-names" class="btn-submit">APPLY CORES CHANGE</button>
+                </div>
+
+                <div class="deck-card">
+                    <h3>📊 LIVE TELEMETRY STREAM</h3>
+                    <div class="telemetry-control-grid">
+                        <div class="tel-row">
+                            <span>TOTAL SHOTS ON TARGET</span>
+                            <div class="tel-actions">
+                                <button onclick="changeTelemetry('hShots', 1)">HOME +</button>
+                                <button onclick="changeTelemetry('aShots', 1)">AWAY +</button>
+                                <button class="btn-tel-reset" onclick="resetTelemetry('Shots')">RESET</button>
+                            </div>
+                        </div>
+                        <div class="tel-row">
+                            <span>CORNER KICKS</span>
+                            <div class="tel-actions">
+                                <button onclick="changeTelemetry('hCorners', 1)">HOME +</button>
+                                <button onclick="changeTelemetry('aCorners', 1)">AWAY +</button>
+                                <button class="btn-tel-reset" onclick="resetTelemetry('Corners')">RESET</button>
+                            </div>
+                        </div>
+                        <div class="tel-row">
+                            <span>COMMIT FOULS</span>
+                            <div class="tel-actions">
+                                <button onclick="changeTelemetry('hFouls', 1)">HOME +</button>
+                                <button onclick="changeTelemetry('aFouls', 1)">AWAY +</button>
+                                <button class="btn-tel-reset" onclick="resetTelemetry('Fouls')">RESET</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-grid-wrapper">
+            <div class="hero-content">
+                <span class="hero-tag anim-hero">THE GOLDEN-BLUE ENCOUNTER 2026</span>
+                <h1 class="exploding-title">Rahula vs St. Thomas' Live Scoring Arena</h1>
+                <p class="anim-hero">Experience next-generation sports broadcasting powered by the Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
+            </div>
+            
+            <div class="hero-animation-arena">
+                <div class="arena-pulse-ring"></div>
+                <div id="canvas-3d-container"></div>
+                <div class="skill-status-badge">
+                    ENGINE: <span id="current-skill-txt" style="color: #FFD700;">STREAM INGEST</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="overlay-showcase-section anim-scroll">
+        <div class="section-title-wrapper">
+            <h2>LIVE BROADCAST OVERLAY</h2>
+            <p>Real-time match feed as synchronized across broadcast displays.</p>
+        </div>
+        <div class="master-scoreboard-overlay">
+            <div id="ov-timer" class="ov-timer-box">00:00</div>
+            <div class="ov-team team-home">
+                <div id="ov-home-name" class="ov-team-name">RAHULA COLLEGE</div>
+                <div id="ov-home-score" class="ov-score">0</div>
+            </div>
+            <div class="ov-vs-badge">VS</div>
+            <div class="ov-team team-away">
+                <div id="ov-away-score" class="ov-score">0</div>
+                <div id="ov-away-name" class="ov-team-name">ST. THOMAS' COLLEGE</div>
+            </div>
+            <div class="ov-live-tag"><span>LIVE</span></div>
+        </div>
+    </section>
+
+    <section class="player-stats-section anim-scroll">
+        <div class="section-title-wrapper">
+            <h2>FEATURED MARQUEE PLAYERS</h2>
+            <p>Key impact generators tracked live on the digital interface matrix.</p>
+        </div>
+        <div class="player-grid">
+            <div class="player-card card-rahula">
+                <div class="player-glow-bar"></div>
+                <div class="p-number">10</div>
+                <div class="player-meta">
+                    <h3>Yenuka Perera</h3>
+                    <span class="p-team team-r">Rahula Core Striker</span>
+                </div>
+                <div class="player-stat-bars">
+                    <div class="p-stat-line">Goals Matrix: <strong>02</strong></div>
+                    <div class="p-stat-line">Assists Stream: <strong>04</strong></div>
+                    <div class="p-stat-line">Shots Conversion: <strong>89%</strong></div>
+                </div>
+            </div>
+            <div class="player-card card-thomas">
+                <div class="player-glow-bar"></div>
+                <div class="p-number">07</div>
+                <div class="player-meta">
+                    <h3>Thomas Silva</h3>
+                    <span class="p-team team-t">St. Thomas' Playmaker</span>
+                </div>
+                <div class="player-stat-bars">
+                    <div class="p-stat-line">Goals Matrix: <strong>01</strong></div>
+                    <div class="p-stat-line">Assists Stream: <strong>03</strong></div>
+                    <div class="p-stat-line">Shots Conversion: <strong>82%</strong></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="analytics-section anim-scroll">
+        <div class="section-title-wrapper">
+            <h2>MATCH TELEMETRY ANALYTICS</h2>
+            <p>Real-time data visualization matrices streamed directly from the main arena field.</p>
+        </div>
+        <div class="analytics-container">
+            <div class="form-group">
+                <div class="stat-row">
+                    <span id="lbl-an-hshots">6</span>
+                    <span class="stat-label">Total Shots On Target</span>
+                    <span id="lbl-an-ashots">4</span>
+                </div>
+                <div class="stat-bar-wrapper">
+                    <div id="bar-an-shots" class="stat-bar-fill fill-home"></div>
+                </div>
+            </div>
+            <div style="margin-top: 25px;">
+                <div class="stat-row">
+                    <span id="lbl-an-hcorners">3</span>
+                    <span class="stat-label">Corner Kicks</span>
+                    <span id="lbl-an-acorners">2</span>
+                </div>
+                <div class="stat-bar-wrapper">
+                    <div id="bar-an-corners" class="stat-bar-fill fill-home"></div>
+                </div>
+            </div>
+            <div style="margin-top: 25px;">
+                <div class="stat-row">
+                    <span id="lbl-an-hfouls">4</span>
+                    <span class="stat-label">Commit Fouls</span>
+                    <span id="lbl-an-afouls">7</span>
+                </div>
+                <div class="stat-bar-wrapper">
+                    <div id="bar-an-fouls" class="stat-bar-fill fill-home"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">
+            <div class="logo-shield"></div>
+            RAHULA WEB TEAM
+        </div>
+        <p>© 2026 Rahula College Football Web Engine Portal. Developed for Premium Stream Analytics Broadcasting.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

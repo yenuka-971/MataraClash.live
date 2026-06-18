@@ -89,6 +89,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .loader-matrix-bg {
@@ -266,7 +267,7 @@ header {
     right: -480px;
     width: 450px;
     height: 100vh;
-    background: rgba(6, 11, 26, 0.85);
+    background: rgba(6, 11, 26, 0.95);
     backdrop-filter: blur(35px);
     -webkit-backdrop-filter: blur(35px);
     border-left: 1px solid rgba(255, 215, 0, 0.2);
@@ -274,6 +275,11 @@ header {
     box-shadow: -15px 0 40px rgba(0,0,0,0.7);
     display: flex;
     flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#admin-sidebar.open {
+    right: 0;
 }
 
 .sidebar-header {
@@ -430,12 +436,6 @@ header {
     background: linear-gradient(180deg, #ffffff 0%, #a2b4dc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.exploding-letter {
-    display: inline-block;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
 }
 
 .hero-content p {

@@ -42,27 +42,34 @@ document.addEventListener("DOMContentLoaded", () => {
         "Ready to Launch"
     ];
 
+    // Safe check to prevent preloader crash if elements are missing
+    if (!pctDisplay && !preloader) return;
+
     const loadInterval = setInterval(() => {
         currentPct += Math.floor(Math.random() * 8) + 2;
         
         if (currentPct >= 100) {
             currentPct = 100;
             clearInterval(loadInterval);
-            pctDisplay.innerText = "100%";
-            statusDisplay.innerText = logs[3];
+            if (pctDisplay) pctDisplay.innerText = "100%";
+            if (statusDisplay) statusDisplay.innerText = logs[3];
             
-            setTimeout(() => {
-                preloader.style.opacity = "0";
-                preloader.style.transform = "scale(1.05)";
+            if (preloader) {
                 setTimeout(() => {
-                    preloader.style.display = "none";
-                }, 500);
-            }, 400);
+                    preloader.style.opacity = "0";
+                    preloader.style.transform = "scale(1.05)";
+                    setTimeout(() => {
+                        preloader.style.display = "none";
+                    }, 500);
+                }, 400);
+            }
         } else {
-            pctDisplay.innerText = (currentPct < 10 ? "0" : "") + currentPct + "%";
-            if (currentPct < 30) statusDisplay.innerText = logs[0];
-            else if (currentPct < 65) statusDisplay.innerText = logs[1];
-            else statusDisplay.innerText = logs[2];
+            if (pctDisplay) pctDisplay.innerText = (currentPct < 10 ? "0" : "") + currentPct + "%";
+            if (statusDisplay) {
+                if (currentPct < 30) statusDisplay.innerText = logs[0];
+                else if (currentPct < 65) statusDisplay.innerText = logs[1];
+                else statusDisplay.innerText = logs[2];
+            }
         }
     }, 60);
 });
@@ -75,8 +82,8 @@ const openBtn = document.getElementById("admin-menu-btn");
 const closeBtn = document.getElementById("admin-close-btn");
 const launchBtn = document.getElementById("hero-launch-btn");
 
-const openAdminSidebar = () => sidebar.classList.add("open");
-const closeAdminSidebar = () => sidebar.classList.remove("open");
+const openAdminSidebar = () => sidebar?.classList.add("open");
+const closeAdminSidebar = () => sidebar?.classList.remove("open");
 
 if (openBtn) openBtn.addEventListener("click", openAdminSidebar);
 if (closeBtn) closeBtn.addEventListener("click", closeAdminSidebar);
@@ -90,13 +97,16 @@ const errorMsg = document.getElementById("auth-error-msg");
 
 if (loginBtn) {
     loginBtn.addEventListener("click", () => {
-        const passVal = document.getElementById("admin-pass").value;
+        const adminPassInput = document.getElementById("admin-pass");
+        if (!adminPassInput) return;
+        
+        const passVal = adminPassInput.value;
         if (passVal === "yenuka is back") {
-            authScreen.style.display = "none";
-            controlsContent.style.display = "block";
-            errorMsg.innerText = "";
+            if (authScreen) authScreen.style.display = "none";
+            if (controlsContent) controlsContent.style.display = "block";
+            if (errorMsg) errorMsg.innerText = "";
         } else {
-            errorMsg.innerText = "ACCESS DENIED: INVALID PRIVILEGE KEY";
+            if (errorMsg) errorMsg.innerText = "ACCESS DENIED: INVALID PRIVILEGE KEY";
         }
     });
 }
@@ -169,7 +179,7 @@ window.addEventListener("load", init3DPlayground);
 // ==========================================
 // ⏱️ MATCH CLOCK (TIMER) SYSTEM LOGIC
 // ==========================================
-let totalSeconds = 1200; // Default: 20 minutes (20 * 60)
+let totalSeconds = 1200; // Default: 20 minutes
 let timerInterval = null;
 let isClockRunning = false;
 
@@ -177,7 +187,6 @@ function updateTimerUI() {
     let mins = Math.floor(totalSeconds / 60);
     let secs = totalSeconds % 60;
     
-    // Formatting to MM:SS string style
     let timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
     
     const liveTimer = document.getElementById("live-timer");
@@ -191,16 +200,11 @@ function startClockMechanism() {
     if (isClockRunning) return;
     isClockRunning = true;
     
+    clearInterval(timerInterval); // Extra safety reset
     timerInterval = setInterval(() => {
         if (totalSeconds > 0) {
             totalSeconds--;
             updateTimerUI();
-            
-            // Only the Admin who triggers changes should write the exact tick to Firebase
-            // To save database bandwidth, we only sync every second locally if firebase is up
-            if (db && authScreen.style.display === "none") {
-                db.ref('match/timer').update({ totalSeconds: totalSeconds });
-            }
         } else {
             clearInterval(timerInterval);
             isClockRunning = false;
@@ -213,7 +217,7 @@ function pauseClockMechanism() {
     isClockRunning = false;
 }
 
-// Clock Control Action Listeners
+// Clock Control Action Listeners with Event-driven Sync
 document.getElementById("btn-clock-start")?.addEventListener("click", () => {
     if (db) {
         db.ref('match/timer').update({ isClockRunning: true, totalSeconds: totalSeconds });
@@ -231,7 +235,10 @@ document.getElementById("btn-clock-pause")?.addEventListener("click", () => {
 });
 
 document.getElementById("btn-clock-set")?.addEventListener("click", () => {
-    const inputVal = document.getElementById("custom-time-input").value;
+    const customInput = document.getElementById("custom-time-input");
+    if (!customInput) return;
+    
+    const inputVal = customInput.value;
     const parts = inputVal.split(":");
     if (parts.length === 2) {
         const m = parseInt(parts[0]) || 0;
@@ -257,14 +264,22 @@ let matchState = {
 };
 
 function syncDisplayUI() {
-    document.getElementById("score-home").innerText = matchState.homeScore;
-    document.getElementById("score-away").innerText = matchState.awayScore;
-    document.getElementById("matrix-home-score").innerText = matchState.homeScore;
-    document.getElementById("matrix-away-score").innerText = matchState.awayScore;
+    const scoreHome = document.getElementById("score-home");
+    const scoreAway = document.getElementById("score-away");
+    const matrixHome = document.getElementById("matrix-home-score");
+    const matrixAway = document.getElementById("matrix-away-score");
+    const posHome = document.getElementById("pos-home");
+    const posAway = document.getElementById("pos-away");
+    const posBar = document.getElementById("pos-bar");
+
+    if (scoreHome) scoreHome.innerText = matchState.homeScore;
+    if (scoreAway) scoreAway.innerText = matchState.awayScore;
+    if (matrixHome) matrixHome.innerText = matchState.homeScore;
+    if (matrixAway) matrixAway.innerText = matchState.awayScore;
     
-    document.getElementById("pos-home").innerText = matchState.possession;
-    document.getElementById("pos-away").innerText = 100 - matchState.possession;
-    document.getElementById("pos-bar").style.width = matchState.possession + "%";
+    if (posHome) posHome.innerText = matchState.possession;
+    if (posAway) posAway.innerText = 100 - matchState.possession;
+    if (posBar) posBar.style.width = matchState.possession + "%";
 }
 
 window.updateScore = function(side, val) {
@@ -285,7 +300,10 @@ window.updateScore = function(side, val) {
 };
 
 window.setPossession = function() {
-    const val = parseInt(document.getElementById("input-possession").value) || 50;
+    const posInput = document.getElementById("input-possession");
+    if (!posInput) return;
+
+    const val = parseInt(posInput.value) || 50;
     matchState.possession = Math.min(100, Math.max(0, val));
     
     if (db) {
@@ -303,11 +321,11 @@ if (db) {
     db.ref('match/').on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            matchState.homeScore = data.homeScore || 0;
-            matchState.awayScore = data.awayScore || 0;
-            matchState.possession = data.possession || 50;
-            syncDisplayUI();
+            matchState.homeScore = data.homeScore !== undefined ? data.homeScore : 0;
+            matchState.awayScore = data.awayScore !== undefined ? data.awayScore : 0;
+            matchState.possession = data.possession !== undefined ? data.possession : 50;
         }
+        syncDisplayUI();
     });
 
     // 2. Listen for Realtime Match Clock Updates
@@ -322,8 +340,8 @@ if (db) {
             } else {
                 pauseClockMechanism();
             }
-            updateTimerUI();
         }
+        updateTimerUI();
     });
 } else {
     // Run initial UI updates on local state mode

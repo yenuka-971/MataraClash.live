@@ -1,7 +1,6 @@
 // ==========================================
 // 🔥 CENTRAL FIREBASE MATRIX CONFIGURATION
 // ==========================================
-// ⚠️ වැදගත්: උඹේ Firebase Console එකෙන් ලැබුණු ඔරිජිනල් කීස් ටික මෙතනට අනිවාර්යයෙන්ම දාන්න.
 const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_AUTH_DOMAIN",
@@ -12,7 +11,6 @@ const firebaseConfig = {
     appId: "YOUR_APP_ID"
 };
 
-// Safe Firebase Initialization Engine
 let db = null;
 try {
     if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
@@ -25,6 +23,37 @@ try {
 } catch (error) {
     console.error("❌ Firebase Boot Error:", error);
 }
+
+// Global Match State Registry
+let matchState = {
+    homeScore: 0,
+    awayScore: 0,
+    possession: 50,
+    totalSeconds: 1200,
+    isClockRunning: false
+};
+
+// ==========================================
+// 📦 LOCAL STORAGE MATRICES (FAIL-SAFE PERSISTENCE)
+// ==========================================
+function saveLocalState() {
+    localStorage.setItem("matara_clash_state", JSON.stringify(matchState));
+}
+
+function loadLocalState() {
+    const saved = localStorage.getItem("matara_clash_state");
+    if (saved) {
+        try {
+            const parsed = JSON.parse(saved);
+            matchState = { ...matchState, ...parsed };
+        } catch (e) {
+            console.error("Local state decode error:", e);
+        }
+    }
+}
+
+// Load cache immediately
+loadLocalState();
 
 // ==========================================
 // ⚡ FAIL-SAFE PRELOADER SUBSYSTEM
@@ -42,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Ready to Launch"
     ];
 
-    // Safe check to prevent preloader crash if elements are missing
     if (!pctDisplay && !preloader) return;
 
     const loadInterval = setInterval(() => {
@@ -71,8 +99,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 else statusDisplay.innerText = logs[2];
             }
         }
-    }, 60);
+    }, 400600050 ? 50 : 30); // Adaptive processing speed
 });
+
+// ==========================================
+// 📺 OBS LIVE STREAM OVERLAY TOGGLE
+// ==========================================
+const obsBtn = document.getElementById("obs-mode-btn");
+if (obsBtn) {
+    obsBtn.addEventListener("click", () => {
+        document.body.classList.toggle("obs-stream-active");
+        if(document.body.classList.contains("obs-stream-active")) {
+            obsBtn.innerHTML = `<i class="fa-solid fa-window-restore"></i> EXIT OBS`;
+        } else {
+            obsBtn.innerHTML = `<i class="fa-solid fa-video"></i> OBS MODE`;
+        }
+    });
+}
 
 // ==========================================
 // 🛡️ SLIDING SIDEBAR SECURITY SYSTEMS
@@ -89,7 +132,6 @@ if (openBtn) openBtn.addEventListener("click", openAdminSidebar);
 if (closeBtn) closeBtn.addEventListener("click", closeAdminSidebar);
 if (launchBtn) launchBtn.addEventListener("click", openAdminSidebar);
 
-// Admin Authentication Gateway Engine
 const loginBtn = document.getElementById("admin-login-btn");
 const authScreen = document.getElementById("admin-auth-screen");
 const controlsContent = document.getElementById("admin-controls-content");
@@ -100,8 +142,7 @@ if (loginBtn) {
         const adminPassInput = document.getElementById("admin-pass");
         if (!adminPassInput) return;
         
-        const passVal = adminPassInput.value;
-        if (passVal === "yenuka is back") {
+        if (adminPassInput.value === "yenuka is back") {
             if (authScreen) authScreen.style.display = "none";
             if (controlsContent) controlsContent.style.display = "block";
             if (errorMsg) errorMsg.innerText = "";
@@ -112,8 +153,11 @@ if (loginBtn) {
 }
 
 // ==========================================
-// 🧊 THREE.JS 3D WIREFRAME GLOBE GENERATOR
+// ⚽ THREE.JS 3D INTERACTIVE FOOTBALL ENGINE (As requested for image_92f3e9.jpg)
 // ==========================================
+let isFootballMode = false;
+let globeMesh, footballGroup;
+
 function init3DPlayground() {
     const container = document.getElementById("canvas-3d-container");
     if (!container) return;
@@ -123,46 +167,115 @@ function init3DPlayground() {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.z = 18;
+    camera.position.z = 16;
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    const geometry = new THREE.IcosahedronGeometry(5, 2);
-    const material = new THREE.MeshBasicMaterial({
+    // Light injection for 3D Football shading
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    dirLight.position.set(10, 10, 10);
+    scene.add(dirLight);
+
+    // --- State 1: Yellow Wireframe Globe Mesh ---
+    const globeGeo = new THREE.IcosahedronGeometry(4.8, 2);
+    const globeMat = new THREE.MeshBasicMaterial({
         color: 0xFFD700,
         wireframe: true,
         transparent: true,
-        opacity: 0.55
+        opacity: 0.5
     });
-    const globeMesh = new THREE.Mesh(geometry, material);
+    globeMesh = new THREE.Mesh(globeGeo, globeMat);
     scene.add(globeMesh);
 
-    const particleGeo = new THREE.BufferGeometry();
-    const particleCount = 250;
-    const posArray = new Float32Array(particleCount * 3);
+    // --- State 2: Cyber Football Group Structure ---
+    footballGroup = new THREE.Group();
+    
+    // Core Inner Dark Sphere
+    const fbInnerGeo = new THREE.SphereGeometry(4.5, 32, 32);
+    const fbInnerMat = new THREE.MeshStandardMaterial({ color: 0x0a0a14, roughness: 0.5 });
+    const fbInner = new THREE.Mesh(fbInnerGeo, fbInnerMat);
+    footballGroup.add(fbInner);
 
-    for (let i = 0; i < particleCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 15;
-    }
-
-    particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    const particleMat = new THREE.PointsMaterial({
-        size: 0.04,
-        color: 0x00ff66
+    // Outer Neon Pentagonal Panel Wireframe
+    const fbOuterGeo = new THREE.IcosahedronGeometry(4.56, 1);
+    const fbOuterMat = new THREE.MeshStandardMaterial({
+        color: 0x00ff66,
+        wireframe: true,
+        wireframeLinewidth: 2,
+        emissive: 0x00ff66,
+        emissiveIntensity: 0.5
     });
+    const fbOuter = new THREE.Mesh(fbOuterGeo, fbOuterMat);
+    footballGroup.add(fbOuter);
+    
+    // Hide initially
+    footballGroup.visible = false;
+    scene.add(footballGroup);
+
+    // Background Particle Matrix
+    const particleGeo = new THREE.BufferGeometry();
+    const particleCount = 200;
+    const posArray = new Float32Array(particleCount * 3);
+    for (let i = 0; i < particleCount * 3; i++) {
+        posArray[i] = (Math.random() - 0.5) * 20;
+    }
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    const particleMat = new THREE.PointsMaterial({ size: 0.04, color: 0x00ff66 });
     const particleMesh = new THREE.Points(particleGeo, particleMat);
     scene.add(particleMesh);
 
+    // Animation Engine Loop
     function animate() {
         requestAnimationFrame(animate);
-        globeMesh.rotation.y += 0.006;
-        globeMesh.rotation.x += 0.003;
+        
+        if (!isFootballMode) {
+            globeMesh.rotation.y += 0.006;
+            globeMesh.rotation.x += 0.003;
+        } else {
+            footballGroup.rotation.y += 0.012;
+            footballGroup.rotation.x += 0.004;
+        }
+        
         particleMesh.rotation.y -= 0.001;
         renderer.render(scene, camera);
     }
+
+    // Morph Transition Mechanism
+    window.toggle3DTransformation = function() {
+        isFootballMode = !isFootballMode;
+        if (isFootballMode) {
+            globeMesh.visible = false;
+            footballGroup.visible = true;
+            footballGroup.scale.set(0.3, 0.3, 0.3); // Burst pop animation trigger
+            document.getElementById("btn-morph-toggle").innerText = "RESET GLOBE";
+        } else {
+            globeMesh.visible = true;
+            footballGroup.visible = false;
+            document.getElementById("btn-morph-toggle").innerText = "TRANSFORM 3D";
+        }
+    };
+
+    // Trigger on container click or HUD button tap
+    container.addEventListener("click", (e) => {
+        if(e.target.id !== "btn-morph-toggle") toggle3DTransformation();
+    });
+    document.getElementById("btn-morph-toggle")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggle3DTransformation();
+    });
+
+    // Animate Scale burst in matrix
+    setInterval(() => {
+        if (isFootballMode && footballGroup.scale.x < 1.0) {
+            let nextScale = Math.min(1.0, footballGroup.scale.x + 0.15);
+            footballGroup.scale.set(nextScale, nextScale, nextScale);
+        }
+    }, 30);
 
     window.addEventListener('resize', () => {
         const w = container.clientWidth;
@@ -179,14 +292,11 @@ window.addEventListener("load", init3DPlayground);
 // ==========================================
 // ⏱️ MATCH CLOCK (TIMER) SYSTEM LOGIC
 // ==========================================
-let totalSeconds = 1200; // Default: 20 minutes
 let timerInterval = null;
-let isClockRunning = false;
 
 function updateTimerUI() {
-    let mins = Math.floor(totalSeconds / 60);
-    let secs = totalSeconds % 60;
-    
+    let mins = Math.floor(matchState.totalSeconds / 60);
+    let secs = matchState.totalSeconds % 60;
     let timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
     
     const liveTimer = document.getElementById("live-timer");
@@ -197,30 +307,32 @@ function updateTimerUI() {
 }
 
 function startClockMechanism() {
-    if (isClockRunning) return;
-    isClockRunning = true;
+    if (matchState.isClockRunning) return;
+    matchState.isClockRunning = true;
     
-    clearInterval(timerInterval); // Extra safety reset
+    clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-        if (totalSeconds > 0) {
-            totalSeconds--;
+        if (matchState.totalSeconds > 0) {
+            matchState.totalSeconds--;
             updateTimerUI();
+            saveLocalState();
         } else {
             clearInterval(timerInterval);
-            isClockRunning = false;
+            matchState.isClockRunning = false;
         }
     }, 1000);
 }
 
 function pauseClockMechanism() {
     clearInterval(timerInterval);
-    isClockRunning = false;
+    matchState.isClockRunning = false;
+    saveLocalState();
 }
 
-// Clock Control Action Listeners with Event-driven Sync
+// Clock UI Event Actions
 document.getElementById("btn-clock-start")?.addEventListener("click", () => {
     if (db) {
-        db.ref('match/timer').update({ isClockRunning: true, totalSeconds: totalSeconds });
+        db.ref('match/timer').update({ isClockRunning: true, totalSeconds: matchState.totalSeconds });
     } else {
         startClockMechanism();
     }
@@ -228,7 +340,7 @@ document.getElementById("btn-clock-start")?.addEventListener("click", () => {
 
 document.getElementById("btn-clock-pause")?.addEventListener("click", () => {
     if (db) {
-        db.ref('match/timer').update({ isClockRunning: false, totalSeconds: totalSeconds });
+        db.ref('match/timer').update({ isClockRunning: false, totalSeconds: matchState.totalSeconds });
     } else {
         pauseClockMechanism();
     }
@@ -238,15 +350,14 @@ document.getElementById("btn-clock-set")?.addEventListener("click", () => {
     const customInput = document.getElementById("custom-time-input");
     if (!customInput) return;
     
-    const inputVal = customInput.value;
-    const parts = inputVal.split(":");
+    const parts = customInput.value.split(":");
     if (parts.length === 2) {
         const m = parseInt(parts[0]) || 0;
         const s = parseInt(parts[1]) || 0;
-        totalSeconds = (m * 60) + s;
+        matchState.totalSeconds = (m * 60) + s;
         
         if (db) {
-            db.ref('match/timer').update({ totalSeconds: totalSeconds, isClockRunning: false });
+            db.ref('match/timer').update({ totalSeconds: matchState.totalSeconds, isClockRunning: false });
         } else {
             pauseClockMechanism();
             updateTimerUI();
@@ -257,12 +368,6 @@ document.getElementById("btn-clock-set")?.addEventListener("click", () => {
 // ==========================================
 // 📊 LIVE SCOREBOARD CORE MATRIX TELEMETRY
 // ==========================================
-let matchState = {
-    homeScore: 0,
-    awayScore: 0,
-    possession: 50
-};
-
 function syncDisplayUI() {
     const scoreHome = document.getElementById("score-home");
     const scoreAway = document.getElementById("score-away");
@@ -290,11 +395,9 @@ window.updateScore = function(side, val) {
     }
     
     if (db) {
-        db.ref('match/').update({
-            homeScore: matchState.homeScore,
-            awayScore: matchState.awayScore
-        });
+        db.ref('match/').update({ homeScore: matchState.homeScore, awayScore: matchState.awayScore });
     } else {
+        saveLocalState();
         syncDisplayUI();
     }
 };
@@ -309,6 +412,7 @@ window.setPossession = function() {
     if (db) {
         db.ref('match/').update({ possession: matchState.possession });
     } else {
+        saveLocalState();
         syncDisplayUI();
     }
 };
@@ -317,25 +421,21 @@ window.setPossession = function() {
 // 📡 REALTIME LIVE DATA SYNCHRONIZER (LISTENERS)
 // ==========================================
 if (db) {
-    // 1. Listen for Scoreboard & Possession Updates
     db.ref('match/').on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-            matchState.homeScore = data.homeScore !== undefined ? data.homeScore : 0;
-            matchState.awayScore = data.awayScore !== undefined ? data.awayScore : 0;
-            matchState.possession = data.possession !== undefined ? data.possession : 50;
+            matchState.homeScore = data.homeScore !== undefined ? data.homeScore : matchState.homeScore;
+            matchState.awayScore = data.awayScore !== undefined ? data.awayScore : matchState.awayScore;
+            matchState.possession = data.possession !== undefined ? data.possession : matchState.possession;
         }
         syncDisplayUI();
     });
 
-    // 2. Listen for Realtime Match Clock Updates
     db.ref('match/timer').on('value', (snapshot) => {
         const timerData = snapshot.val();
         if (timerData) {
-            totalSeconds = timerData.totalSeconds !== undefined ? timerData.totalSeconds : totalSeconds;
-            const cloudRunning = timerData.isClockRunning || false;
-            
-            if (cloudRunning) {
+            matchState.totalSeconds = timerData.totalSeconds !== undefined ? timerData.totalSeconds : matchState.totalSeconds;
+            if (timerData.isClockRunning) {
                 startClockMechanism();
             } else {
                 pauseClockMechanism();
@@ -344,7 +444,6 @@ if (db) {
         updateTimerUI();
     });
 } else {
-    // Run initial UI updates on local state mode
     syncDisplayUI();
     updateTimerUI();
 }

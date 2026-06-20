@@ -4,19 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matara Clash | Live Scoring Arena</title>
-    <!-- Cyberpunk Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Three.js Core Library CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Firebase Core App & Database (V8 Legacy for easy integration) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 🔥 CYBER PRELOADER SUBSYSTEM -->
     <div id="cyber-preloader">
         <div class="loader-matrix">
             <div class="cyber-spinner"></div>
@@ -25,10 +21,8 @@
         </div>
     </div>
 
-    <!-- 🌐 MAIN INTERACTION INTERFACE -->
     <div class="app-container">
         
-        <!-- TOP NAVIGATION DECK -->
         <header class="main-header">
             <div class="logo-zone">
                 <div class="cube-logo"></div>
@@ -41,11 +35,9 @@
             </div>
         </header>
 
-        <!-- HERO SCORE MATRIX VIEW -->
         <section class="hero-matrix-section">
             <div class="hero-layout">
                 
-                <!-- Match Meta & Dynamic Scoreboard -->
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
                     <h2>Rahula vs St. Thomas' <br><span class="sub-glow">Live Scoring Arena</span></h2>
@@ -53,7 +45,6 @@
                     
                     <button id="hero-launch-btn" class="cyber-btn btn-primary">Launch Control Deck <i class="fa-solid fa-link"></i></button>
 
-                    <!-- LIVE SCORE BOARD STRIP (OBS OPTIMIZED) -->
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
                         <div class="team-block home">
                             <span class="team-name">RAHULA</span>
@@ -70,11 +61,8 @@
                     </div>
                 </div>
 
-                <!-- 3D INTERACTIVE GRAPHICS CORE -->
                 <div class="graphics-wrapper">
-                    <!-- Interactive container referenced in image_92f3e9.jpg -->
                     <div id="canvas-3d-container">
-                        <!-- Morph Animation Control HUD -->
                         <div class="graphics-hud">
                             <span class="hud-tag">ENGINE: TELEMETRY SYNC</span>
                             <button id="btn-morph-toggle" class="hud-action-btn">TRANSFORM 3D</button>
@@ -85,7 +73,6 @@
             </div>
         </section>
 
-        <!-- 📊 CORE MATCH TELEMETRY (POSSESSION / STATS) -->
         <section class="telemetry-section">
             <div class="section-title-wrapper">
                 <h3 class="section-title"><i class="fa-solid fa-chart-bar neon-text-green"></i> LIVE MATCH STATS</h3>
@@ -103,14 +90,12 @@
             </div>
         </section>
 
-        <!-- 🏃 MATCH DETAILS & TEAM LINEUPS SECTION -->
         <section class="lineups-section">
             <div class="section-title-wrapper">
                 <h3 class="section-title"><i class="fa-solid fa-users neon-text-gold"></i> SQUAD SYNC & DETAILS</h3>
                 <div class="cyber-line"></div>
             </div>
             <div class="lineups-grid">
-                <!-- Rahula Team Card -->
                 <div class="squad-card team-rahula">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder logo-rahula">RC</div>
@@ -123,7 +108,6 @@
                         <li><span class="jersey-num">10</span> Player Four</li>
                     </ul>
                 </div>
-                <!-- St. Thomas' Team Card -->
                 <div class="squad-card team-thomas">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder logo-thomas">STC</div>
@@ -141,14 +125,12 @@
 
     </div>
 
-    <!-- 🛡️ SLIDING SIDEBAR SECURITY PANEL (ADMIN PANEL) -->
     <div id="admin-sidebar" class="sidebar-matrix">
         <div class="sidebar-header">
             <h3><i class="fa-solid fa-user-shield neon-text-gold"></i> CORE CONTROLS</h3>
             <button id="admin-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <!-- AUTH GATEWAY -->
         <div id="admin-auth-screen" class="auth-wrapper">
             <p class="auth-instruction">INPUT HIGH-PRIVILEGE SECURITY KEY TO ACCESS COMMAND PANEL.</p>
             <div class="input-group">
@@ -158,10 +140,8 @@
             <div id="auth-error-msg" class="error-text"></div>
         </div>
 
-        <!-- RESTRUCTURED NEAT CONTROL PANEL CONTENT -->
         <div id="admin-controls-content" class="controls-wrapper" style="display: none;">
             
-            <!-- Category 1: Score Engine -->
             <div class="control-block-group">
                 <h4 class="group-title"><i class="fa-solid fa-gamepad"></i> SCORE TELEMETRY</h4>
                 <div class="admin-grid-2x2">
@@ -172,7 +152,6 @@
                 </div>
             </div>
 
-            <!-- Category 2: Match Clock Engine -->
             <div class="control-block-group">
                 <h4 class="group-title"><i class="fa-solid fa-stopwatch"></i> MATCH CLOCK METRICS</h4>
                 <div class="matrix-score-display-small">DECK CLOCK: <span id="deck-timer" class="neon-text-green">20:00</span></div>
@@ -186,7 +165,6 @@
                 </div>
             </div>
 
-            <!-- Category 3: Match Stats Injector -->
             <div class="control-block-group">
                 <h4 class="group-title"><i class="fa-solid fa-sliders"></i> INTERACTIVE INJECTORS</h4>
                 <label class="input-label">Rahula Ball Possession %</label>
@@ -202,5 +180,6 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
 </body>
 </html>

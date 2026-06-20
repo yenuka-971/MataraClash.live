@@ -56,7 +56,7 @@ function loadLocalState() {
 loadLocalState();
 
 // ==========================================
-// ⚡ FAIL-SAFE PRELOADER SUBSYSTEM
+// ⚡ FAIL-SAFE PRELOADER SUBSYSTEM (FIXED 00% STUCK)
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const pctDisplay = document.getElementById("load-pct");
@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 else statusDisplay.innerText = logs[2];
             }
         }
-    }, 400600050 ? 50 : 30); // Adaptive processing speed
+    }, 45); // Cleaned processing interval speed
 });
 
 // ==========================================
@@ -153,7 +153,7 @@ if (loginBtn) {
 }
 
 // ==========================================
-// ⚽ THREE.JS 3D INTERACTIVE FOOTBALL ENGINE (As requested for image_92f3e9.jpg)
+// ⚽ THREE.JS 3D INTERACTIVE FOOTBALL ENGINE
 // ==========================================
 let isFootballMode = false;
 let globeMesh, footballGroup;
@@ -174,14 +174,13 @@ function init3DPlayground() {
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
 
-    // Light injection for 3D Football shading
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
     const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
     dirLight.position.set(10, 10, 10);
     scene.add(dirLight);
 
-    // --- State 1: Yellow Wireframe Globe Mesh ---
+    // Wireframe Globe Mesh
     const globeGeo = new THREE.IcosahedronGeometry(4.8, 2);
     const globeMat = new THREE.MeshBasicMaterial({
         color: 0xFFD700,
@@ -192,16 +191,14 @@ function init3DPlayground() {
     globeMesh = new THREE.Mesh(globeGeo, globeMat);
     scene.add(globeMesh);
 
-    // --- State 2: Cyber Football Group Structure ---
+    // Cyber Football Structure
     footballGroup = new THREE.Group();
     
-    // Core Inner Dark Sphere
     const fbInnerGeo = new THREE.SphereGeometry(4.5, 32, 32);
     const fbInnerMat = new THREE.MeshStandardMaterial({ color: 0x0a0a14, roughness: 0.5 });
     const fbInner = new THREE.Mesh(fbInnerGeo, fbInnerMat);
     footballGroup.add(fbInner);
 
-    // Outer Neon Pentagonal Panel Wireframe
     const fbOuterGeo = new THREE.IcosahedronGeometry(4.56, 1);
     const fbOuterMat = new THREE.MeshStandardMaterial({
         color: 0x00ff66,
@@ -213,11 +210,10 @@ function init3DPlayground() {
     const fbOuter = new THREE.Mesh(fbOuterGeo, fbOuterMat);
     footballGroup.add(fbOuter);
     
-    // Hide initially
     footballGroup.visible = false;
     scene.add(footballGroup);
 
-    // Background Particle Matrix
+    // Background Particles
     const particleGeo = new THREE.BufferGeometry();
     const particleCount = 200;
     const posArray = new Float32Array(particleCount * 3);
@@ -229,7 +225,6 @@ function init3DPlayground() {
     const particleMesh = new THREE.Points(particleGeo, particleMat);
     scene.add(particleMesh);
 
-    // Animation Engine Loop
     function animate() {
         requestAnimationFrame(animate);
         
@@ -245,13 +240,12 @@ function init3DPlayground() {
         renderer.render(scene, camera);
     }
 
-    // Morph Transition Mechanism
     window.toggle3DTransformation = function() {
         isFootballMode = !isFootballMode;
         if (isFootballMode) {
             globeMesh.visible = false;
             footballGroup.visible = true;
-            footballGroup.scale.set(0.3, 0.3, 0.3); // Burst pop animation trigger
+            footballGroup.scale.set(0.3, 0.3, 0.3);
             document.getElementById("btn-morph-toggle").innerText = "RESET GLOBE";
         } else {
             globeMesh.visible = true;
@@ -260,7 +254,6 @@ function init3DPlayground() {
         }
     };
 
-    // Trigger on container click or HUD button tap
     container.addEventListener("click", (e) => {
         if(e.target.id !== "btn-morph-toggle") toggle3DTransformation();
     });
@@ -269,7 +262,6 @@ function init3DPlayground() {
         toggle3DTransformation();
     });
 
-    // Animate Scale burst in matrix
     setInterval(() => {
         if (isFootballMode && footballGroup.scale.x < 1.0) {
             let nextScale = Math.min(1.0, footballGroup.scale.x + 0.15);
@@ -329,7 +321,6 @@ function pauseClockMechanism() {
     saveLocalState();
 }
 
-// Clock UI Event Actions
 document.getElementById("btn-clock-start")?.addEventListener("click", () => {
     if (db) {
         db.ref('match/timer').update({ isClockRunning: true, totalSeconds: matchState.totalSeconds });
@@ -418,7 +409,7 @@ window.setPossession = function() {
 };
 
 // ==========================================
-// 📡 REALTIME LIVE DATA SYNCHRONIZER (LISTENERS)
+// 📡 REALTIME LIVE DATA SYNCHRONIZER
 // ==========================================
 if (db) {
     db.ref('match/').on('value', (snapshot) => {

@@ -41,7 +41,7 @@
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
                     
-                    <!-- 🆕 MATCH DURATION DISPLAY (NEW) -->
+                    <!-- MATCH DURATION DISPLAY -->
                     <div class="match-elapsed-display">
                         MATCH DURATION: <span id="main-elapsed-timer" class="neon-text-gold">00:00</span>
                     </div>
@@ -110,17 +110,26 @@
                 <div class="cyber-line"></div>
             </div>
             <div class="lineups-grid">
+                <!-- ===== HOME SQUAD CARD WITH LOGO ===== -->
                 <div class="squad-card team-rahula">
                     <div class="squad-header">
-                        <div class="squad-logo-placeholder logo-rahula">HOME</div>
+                        <div class="squad-logo-placeholder">
+                            <img id="home-logo-img" class="team-logo-img" src="" alt="Home Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('home-logo-text').style.display='flex';">
+                            <span id="home-logo-text" class="logo-text">HOME</span>
+                        </div>
                         <h4 id="squad-home-title">RAHULA COLLEGE</h4>
                     </div>
                     <ul id="squad-home-list" class="player-list">
                         </ul>
                 </div>
+
+                <!-- ===== AWAY SQUAD CARD WITH LOGO ===== -->
                 <div class="squad-card team-thomas">
                     <div class="squad-header">
-                        <div class="squad-logo-placeholder logo-thomas">AWAY</div>
+                        <div class="squad-logo-placeholder">
+                            <img id="away-logo-img" class="team-logo-img" src="" alt="Away Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('away-logo-text').style.display='flex';">
+                            <span id="away-logo-text" class="logo-text">AWAY</span>
+                        </div>
                         <h4 id="squad-away-title">ST. THOMAS' COLLEGE</h4>
                     </div>
                     <ul id="squad-away-list" class="player-list">
@@ -172,6 +181,18 @@
                         <div class="matrix-score-sync-status">
                             MATRIX SCOREBOARD OVERVIEW: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
                         </div>
+                        
+                        <!-- ===== 🆕 TEAM LOGOS SECTION (NEW) ===== -->
+                        <div class="control-block-group" style="margin-top: 20px;">
+                            <h4 class="group-title"><i class="fa-solid fa-image"></i> TEAM LOGOS</h4>
+                            <label class="input-label">Home Team Logo URL</label>
+                            <input type="text" id="input-home-logo" placeholder="https://example.com/home-logo.png">
+                            <label class="input-label" style="margin-top:10px;">Away Team Logo URL</label>
+                            <input type="text" id="input-away-logo" placeholder="https://example.com/away-logo.png">
+                            <button onclick="saveLogoSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE LOGOS</button>
+                        </div>
+                        <!-- ========================================= -->
+
                         <p style="color:#94a3b8; margin-top:20px;">Welcome to the Matara Clash Live control deck. All core processes are executing normally inside the client mainframe.</p>
                     </div>
 
@@ -252,7 +273,7 @@
                             </div>
                         </div>
 
-                        <!-- 🆕 MATCH DURATION (ELAPSED) CONTROLS (NEW) -->
+                        <!-- MATCH DURATION (ELAPSED) CONTROLS -->
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-clock"></i> MATCH DURATION (ELAPSED)</h4>
                             <div class="matrix-score-display-small">ELAPSED: <span id="deck-elapsed" class="neon-text-green">00:00</span></div>

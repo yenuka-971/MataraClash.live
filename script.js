@@ -31,12 +31,16 @@ let matchState = {
     possession: 50,
     totalSeconds: 1200, // Countdown timer (20:00)
     isClockRunning: false,
-    // ===== 🆕 Elapsed Timer State (NEW) =====
+    // ===== Elapsed Timer State =====
     matchElapsedSeconds: 0,
     isMatchRunning: false,
     // =======================================
     homeTeam: "RAHULA",
     awayTeam: "ST. THOMAS'",
+    // ===== 🆕 Logos =====
+    homeLogo: "",
+    awayLogo: "",
+    // =====================
     rahulaPlayers: ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"],
     thomasPlayers: ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"],
     streamNotice: "BIG MATCH DECK ACTIVE",
@@ -394,7 +398,7 @@ if (loginBtn) {
 }
 
 // ==========================================
-// 🆕 DYNAMIC PLAYER MANAGEMENT (NEW)
+// 🆕 DYNAMIC PLAYER MANAGEMENT
 // ==========================================
 
 function renderPlayerInputs() {
@@ -476,6 +480,10 @@ function populateAdminInputs() {
     document.getElementById("input-stream-notice").value = matchState.streamNotice;
     document.getElementById("input-ticker-text").value = matchState.tickerText;
     document.getElementById("input-youtube-url").value = matchState.youtubeUrl || "";
+    
+    // ===== 🆕 Populate Logo URLs =====
+    document.getElementById("input-home-logo").value = matchState.homeLogo || "";
+    document.getElementById("input-away-logo").value = matchState.awayLogo || "";
 }
 
 // Categories Tab Switcher Logic
@@ -510,6 +518,20 @@ window.saveTeamSettings = function() {
     }
     renderPlayerInputs(); // Update titles
 };
+
+// ===== 🆕 SAVE LOGO SETTINGS (NEW) =====
+window.saveLogoSettings = function() {
+    matchState.homeLogo = document.getElementById("input-home-logo").value.trim();
+    matchState.awayLogo = document.getElementById("input-away-logo").value.trim();
+    
+    if (db) {
+        db.ref('match/meta').update({ homeLogo: matchState.homeLogo, awayLogo: matchState.awayLogo });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+// ========================================
 
 window.savePlayerSettings = function() {
     // Read all home players
@@ -790,7 +812,7 @@ document.getElementById("btn-clock-set")?.addEventListener("click", () => {
 });
 
 // ==========================================
-// 🆕 MATCH DURATION (ELAPSED) SYSTEM (NEW)
+// 🆕 MATCH DURATION (ELAPSED) SYSTEM
 // ==========================================
 let matchInterval = null;
 
@@ -895,6 +917,10 @@ function updateLivePageUI() {
     const livePosAway = document.getElementById("live-pos-away");
     const livePosBar = document.getElementById("live-pos-bar");
     const liveIframe = document.getElementById("live-youtube-iframe");
+    
+    // 🆕 Live Page Logos
+    const liveHomeLogo = document.getElementById("live-home-logo");
+    const liveAwayLogo = document.getElementById("live-away-logo");
 
     if (liveHomeScore) liveHomeScore.innerText = matchState.homeScore;
     if (liveAwayScore) liveAwayScore.innerText = matchState.awayScore;
@@ -909,6 +935,24 @@ function updateLivePageUI() {
         liveIframe.src = `https://www.youtube.com/embed/${matchState.youtubeUrl}?autoplay=1&mute=0&controls=1&rel=0`;
     } else if (liveIframe) {
         liveIframe.src = "";
+    }
+
+    // Update Live Logos
+    if (liveHomeLogo) {
+        if (matchState.homeLogo) {
+            liveHomeLogo.src = matchState.homeLogo;
+            liveHomeLogo.style.display = 'block';
+        } else {
+            liveHomeLogo.style.display = 'none';
+        }
+    }
+    if (liveAwayLogo) {
+        if (matchState.awayLogo) {
+            liveAwayLogo.src = matchState.awayLogo;
+            liveAwayLogo.style.display = 'block';
+        } else {
+            liveAwayLogo.style.display = 'none';
+        }
     }
 }
 
@@ -933,6 +977,12 @@ function syncDisplayUI() {
     const posBar = document.getElementById("pos-bar");
     const streamNotice = document.getElementById("display-stream-notice");
     const tickerStrip = document.getElementById("live-ticker-strip");
+
+    // 🆕 Main Page Squad Logos
+    const homeLogoImg = document.getElementById("home-logo-img");
+    const awayLogoImg = document.getElementById("away-logo-img");
+    const homeLogoText = document.getElementById("home-logo-text");
+    const awayLogoText = document.getElementById("away-logo-text");
 
     if (scoreHome) scoreHome.innerText = matchState.homeScore;
     if (scoreAway) scoreAway.innerText = matchState.awayScore;
@@ -984,7 +1034,29 @@ function syncDisplayUI() {
     // Update Elapsed Timer UI
     updateElapsedUI();
     
-    // ========== 🆕 UPDATE LIVE PAGE UI (for live.html) ==========
+    // ========== UPDATE MAIN PAGE LOGOS ==========
+    if (homeLogoImg && homeLogoText) {
+        if (matchState.homeLogo) {
+            homeLogoImg.src = matchState.homeLogo;
+            homeLogoImg.style.display = 'block';
+            homeLogoText.style.display = 'none';
+        } else {
+            homeLogoImg.style.display = 'none';
+            homeLogoText.style.display = 'flex';
+        }
+    }
+    if (awayLogoImg && awayLogoText) {
+        if (matchState.awayLogo) {
+            awayLogoImg.src = matchState.awayLogo;
+            awayLogoImg.style.display = 'block';
+            awayLogoText.style.display = 'none';
+        } else {
+            awayLogoImg.style.display = 'none';
+            awayLogoText.style.display = 'flex';
+        }
+    }
+
+    // ========== UPDATE LIVE PAGE UI (for live.html) ==========
     updateLivePageUI();
 }
 
@@ -1040,6 +1112,9 @@ if (db) {
             matchState.streamNotice = meta.streamNotice || matchState.streamNotice;
             matchState.tickerText = meta.tickerText || matchState.tickerText;
             matchState.youtubeUrl = meta.youtubeUrl || "";
+            // ===== 🆕 Sync Logos =====
+            matchState.homeLogo = meta.homeLogo || "";
+            matchState.awayLogo = meta.awayLogo || "";
         }
         syncDisplayUI();
     });

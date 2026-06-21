@@ -192,7 +192,7 @@ body {
     letter-spacing: 2px;
 }
 
-/* ===== 🆕 MATCH ELAPSED DISPLAY (NEW) ===== */
+/* MATCH ELAPSED DISPLAY */
 .match-elapsed-display {
     font-family: var(--font-matrix);
     font-size: 1rem;
@@ -207,7 +207,6 @@ body {
     font-size: 1.2rem;
     font-weight: 700;
 }
-/* ========================================= */
 
 .hero-layout h2 {
     font-family: var(--font-matrix);
@@ -467,19 +466,33 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 .squad-logo-placeholder {
-    width: 50px;
-    height: 40px;
-    border-radius: 6px;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: var(--font-matrix);
-    font-weight: bold;
-    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
-.logo-rahula { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--neon-gold); color: var(--neon-gold); }
-.logo-thomas { background: rgba(0, 240, 255, 0.15); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+.team-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.logo-text {
+    font-family: var(--font-matrix);
+    font-weight: bold;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    letter-spacing: 1px;
+    text-align: center;
+}
 
 .squad-header h4 { font-family: var(--font-matrix); font-size: 1.1rem; }
 .player-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
@@ -812,7 +825,7 @@ input:focus { outline: none; border-color: var(--neon-gold); }
 .error-text { color: var(--neon-red); font-size: 0.8rem; font-family: var(--font-matrix); }
 
 /* ==========================================================================
-   🆕 YOUTUBE LIVE STREAM CONTAINER & ASPECT RATIO
+   YOUTUBE LIVE STREAM CONTAINER & ASPECT RATIO
    ========================================================================== */
 .stream-feed-wrapper {
     width: 100%;
@@ -846,7 +859,7 @@ input:focus { outline: none; border-color: var(--neon-gold); }
 }
 
 /* ==========================================================================
-   🆕 LIVE.HTML SPECIFIC STYLES (NEW)
+   LIVE.HTML SPECIFIC STYLES
    ========================================================================== */
 body.live-match-body {
     background: #07070d;
@@ -981,6 +994,17 @@ body.live-match-body {
     text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
 }
 
+/* ===== 🆕 Live Page Logos ===== */
+.live-team-logo {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.2);
+    padding: 2px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
 @media (max-width: 768px) {
     .live-scoreboard-board { grid-template-columns: 1fr; }
     .team-block-popup { padding: 15px 20px; flex-direction: row; }
@@ -990,6 +1014,7 @@ body.live-match-body {
     .pos-bar-bg { width: 30%; }
     .possession-text { font-size: 0.8rem; }
     .live-match-container { gap: 15px; }
+    .live-team-logo { width: 30px !important; height: 30px !important; }
 }
 
 /* ==========================================================================

@@ -18,7 +18,10 @@
         <!-- Scoreboard -->
         <div class="live-scoreboard-board">
             <div class="team-block-popup home">
-                <span class="team-name-popup" id="live-home-name">RAHULA</span>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <img id="live-home-logo" class="live-team-logo" src="" alt="Home Logo" style="display: none; width: 50px; height: 50px; object-fit: contain;">
+                    <span class="team-name-popup" id="live-home-name">RAHULA</span>
+                </div>
                 <span class="score-digit-popup" id="live-home-score">0</span>
             </div>
             <div class="timer-block-popup">
@@ -28,7 +31,10 @@
             </div>
             <div class="team-block-popup away">
                 <span class="score-digit-popup" id="live-away-score">0</span>
-                <span class="team-name-popup" id="live-away-name">ST. THOMAS'</span>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span class="team-name-popup" id="live-away-name">ST. THOMAS'</span>
+                    <img id="live-away-logo" class="live-team-logo" src="" alt="Away Logo" style="display: none; width: 50px; height: 50px; object-fit: contain;">
+                </div>
             </div>
         </div>
 
@@ -50,15 +56,13 @@
         // Ensure the video loads if URL already exists when page loads
         document.addEventListener('DOMContentLoaded', function() {
             // The main script.js sync will handle updates, but we call it once to be safe.
-            // The global matchState and syncDisplayUI will update this page automatically.
-            // However, if Firebase takes a moment, we set initial state from local.
             if (typeof matchState !== 'undefined' && matchState.youtubeUrl) {
                 const iframe = document.getElementById('live-youtube-iframe');
                 if (iframe) {
                     iframe.src = `https://www.youtube.com/embed/${matchState.youtubeUrl}?autoplay=1&mute=0&controls=1&rel=0`;
                 }
             }
-            // Sync scores and names immediately
+            // Sync scores, names, and logos immediately
             if (typeof matchState !== 'undefined') {
                 const homeScore = document.getElementById('live-home-score');
                 const awayScore = document.getElementById('live-away-score');
@@ -69,6 +73,10 @@
                 const posBar = document.getElementById('live-pos-bar');
                 const posHome = document.getElementById('live-pos-home');
                 const posAway = document.getElementById('live-pos-away');
+                
+                // Logos
+                const homeLogoImg = document.getElementById('live-home-logo');
+                const awayLogoImg = document.getElementById('live-away-logo');
 
                 if (homeScore) homeScore.innerText = matchState.homeScore;
                 if (awayScore) awayScore.innerText = matchState.awayScore;
@@ -87,6 +95,24 @@
                 if (posBar) posBar.style.width = matchState.possession + '%';
                 if (posHome) posHome.innerText = matchState.homeTeam + ' (' + matchState.possession + '%)';
                 if (posAway) posAway.innerText = matchState.awayTeam + ' (' + (100 - matchState.possession) + '%)';
+
+                // Set Logos
+                if (homeLogoImg) {
+                    if (matchState.homeLogo) {
+                        homeLogoImg.src = matchState.homeLogo;
+                        homeLogoImg.style.display = 'block';
+                    } else {
+                        homeLogoImg.style.display = 'none';
+                    }
+                }
+                if (awayLogoImg) {
+                    if (matchState.awayLogo) {
+                        awayLogoImg.src = matchState.awayLogo;
+                        awayLogoImg.style.display = 'block';
+                    } else {
+                        awayLogoImg.style.display = 'none';
+                    }
+                }
             }
         });
     </script>

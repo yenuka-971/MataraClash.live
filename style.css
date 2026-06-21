@@ -27,6 +27,7 @@ body {
     font-family: var(--font-prose);
     overflow-x: hidden;
     background-image: radial-gradient(circle at 50% 50%, #111126 0%, #07070d 80%);
+    padding-bottom: 60px; /* Space for ticker text banner */
 }
 
 /* ==========================================================================
@@ -450,7 +451,7 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 .squad-logo-placeholder {
-    width: 40px;
+    width: 50px;
     height: 40px;
     border-radius: 6px;
     display: flex;
@@ -458,7 +459,7 @@ body.obs-stream-active .live-scoreboard-board {
     align-items: center;
     font-family: var(--font-matrix);
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 .logo-rahula { background: rgba(255, 215, 0, 0.15); border: 1px solid var(--neon-gold); color: var(--neon-gold); }
@@ -478,7 +479,40 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 /* ==========================================================================
-   🛡️ NEW CYBERPUNK ADMIN MODAL OVERLAY (BLURRED BACKGROUND)
+   📻 NEWS TICKER SYSTEM SCROLL BAR
+   ========================================================================== */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    background: #090914;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    padding: 12px 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.ticker-move {
+    display: inline-block;
+    white-space: nowrap;
+    padding-right: 100%;
+    animation: tickerLoop 25s linear infinite;
+    font-family: var(--font-matrix);
+    font-size: 0.9rem;
+    color: var(--neon-gold);
+    letter-spacing: 2px;
+    text-shadow: var(--cyber-glow);
+}
+
+@keyframes tickerLoop {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* ==========================================================================
+   🛡️ CYBERPUNK ADMIN MODAL OVERLAY (BLURRED BACKGROUND)
    ========================================================================== */
 .admin-modal-overlay {
     position: fixed;
@@ -490,7 +524,7 @@ body.obs-stream-active .live-scoreboard-board {
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     z-index: 3000;
-    display: none; /* Flex when open */
+    display: none;
     justify-content: center;
     align-items: center;
     opacity: 0;
@@ -608,6 +642,7 @@ body.obs-stream-active .live-scoreboard-board {
     padding: 30px;
     overflow-y: auto;
     background: var(--bg-card);
+    padding-bottom: 80px;
 }
 
 .admin-tab-panel { display: none; animation: tabFadeIn 0.3s ease; }
@@ -627,7 +662,7 @@ body.obs-stream-active .live-scoreboard-board {
     margin-bottom: 20px;
 }
 
-/* ADMIN INNER CONTROLS (OLD STYLES PRESERVED) */
+/* ADMIN INNER CONTROLS */
 .control-block-group {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255,255,255,0.05);
@@ -763,7 +798,6 @@ input:focus { outline: none; border-color: var(--neon-gold); }
 }
 
 @media (max-width: 768px) {
-    /* Make Modal responsive on small screens */
     .admin-dashboard-layout { flex-direction: column; }
     .admin-modal-sidebar {
         width: 100%;

@@ -24,13 +24,21 @@ try {
     console.error("❌ Firebase Boot Error:", error);
 }
 
-// Global Match State Registry
+// Extended Global Match State Registry
 let matchState = {
     homeScore: 0,
     awayScore: 0,
     possession: 50,
     totalSeconds: 1200,
-    isClockRunning: false
+    isClockRunning: false,
+    // Dynamic Custom Categories State Block
+    homeTeam: "RAHULA",
+    awayTeam: "ST. THOMAS'",
+    rahulaPlayers: ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"],
+    thomasPlayers: ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"],
+    streamNotice: "BIG MATCH DECK ACTIVE",
+    tickerText: "WELCOME TO THE GOLDEN-BLUE ENCOUNTER 2026 Live Broadcast Powered by Rahula Web Team. Realtime scores synchronized dynamically.",
+    masterKey: "yenuka is back"
 };
 
 // ==========================================
@@ -117,21 +125,23 @@ if (obsBtn) {
 }
 
 // ==========================================
-// 🛡️ NEW CYBERPUNK ADMIN MODAL SYSTEM
+// 🛡️ CYBERPUNK ADMIN MODAL SYSTEM
 // ==========================================
 const adminModalOverlay = document.getElementById("admin-modal-overlay");
 const openAdminHeaderBtn = document.getElementById("admin-menu-btn");
 const openAdminHeroBtn = document.getElementById("hero-launch-btn");
 const closeAdminBtn = document.getElementById("admin-close-btn");
 
-const openModal = () => { if(adminModalOverlay) adminModalOverlay.classList.add("open"); };
+const openModal = () => { 
+    if(adminModalOverlay) adminModalOverlay.classList.add("open"); 
+    populateAdminInputs(); // Load current data into inputs when modal opens
+};
 const closeModal = () => { if(adminModalOverlay) adminModalOverlay.classList.remove("open"); };
 
 if (openAdminHeaderBtn) openAdminHeaderBtn.addEventListener("click", openModal);
 if (openAdminHeroBtn) openAdminHeroBtn.addEventListener("click", openModal);
 if (closeAdminBtn) closeAdminBtn.addEventListener("click", closeModal);
 
-// Close modal if clicked outside the window
 if (adminModalOverlay) {
     adminModalOverlay.addEventListener("click", (e) => {
         if (e.target === adminModalOverlay) closeModal();
@@ -149,15 +159,28 @@ if (loginBtn) {
         const adminPassInput = document.getElementById("admin-pass");
         if (!adminPassInput) return;
         
-        // Put your password here (Currently "yenuka is back")
-        if (adminPassInput.value === "yenuka is back") {
+        if (adminPassInput.value === matchState.masterKey) {
             if (authScreen) authScreen.style.display = "none";
-            if (controlsContent) controlsContent.style.display = "flex"; // Show Dashboard
+            if (controlsContent) controlsContent.style.display = "flex";
             if (errorMsg) errorMsg.innerText = "";
         } else {
             if (errorMsg) errorMsg.innerText = "ACCESS DENIED: INVALID PRIVILEGE KEY";
         }
     });
+}
+
+// Populate Admin Panel fields with current data
+function populateAdminInputs() {
+    document.getElementById("input-home-team").value = matchState.homeTeam;
+    document.getElementById("input-away-team").value = matchState.awayTeam;
+    
+    for(let i=0; i<4; i++) {
+        document.getElementById(`p-home-${i}`).value = matchState.rahulaPlayers[i] || "";
+        document.getElementById(`p-away-${i}`).value = matchState.thomasPlayers[i] || "";
+    }
+    
+    document.getElementById("input-stream-notice").value = matchState.streamNotice;
+    document.getElementById("input-ticker-text").value = matchState.tickerText;
 }
 
 // Categories Tab Switcher Logic
@@ -171,6 +194,80 @@ window.switchAdminTab = function(event, tabId) {
     document.getElementById(tabId).classList.add('active-tab');
     event.currentTarget.classList.add('active');
 }
+
+// ==========================================
+// ⚡ NEW DYNAMIC SYNC FORM ACTIONS
+// ==========================================
+window.saveTeamSettings = function() {
+    matchState.homeTeam = document.getElementById("input-home-team").value.toUpperCase() || "HOME";
+    matchState.awayTeam = document.getElementById("input-away-team").value.toUpperCase() || "AWAY";
+    
+    if (db) {
+        db.ref('match/meta').update({ homeTeam: matchState.homeTeam, awayTeam: matchState.awayTeam });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+
+window.savePlayerSettings = function() {
+    for(let i=0; i<4; i++) {
+        matchState.rahulaPlayers[i] = document.getElementById(`p-home-${i}`).value || `Player ${i+1}`;
+        matchState.thomasPlayers[i] = document.getElementById(`p-away-${i}`).value || `Player ${i+1}`;
+    }
+    
+    if (db) {
+        db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+
+window.saveStreamSettings = function() {
+    matchState.streamNotice = document.getElementById("input-stream-notice").value || "LIVE AREA ACTIVE";
+    
+    if (db) {
+        db.ref('match/meta').update({ streamNotice: matchState.streamNotice });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+
+window.saveTickerSettings = function() {
+    matchState.tickerText = document.getElementById("input-ticker-text").value || "...";
+    
+    if (db) {
+        db.ref('match/meta').update({ tickerText: matchState.tickerText });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+
+window.savePasswordSettings = function() {
+    const current = document.getElementById("pass-current").value;
+    const newVal = document.getElementById("pass-new").value;
+    const msg = document.getElementById("pass-msg");
+    
+    if (current === matchState.masterKey) {
+        if (newVal.trim().length > 0) {
+            matchState.masterKey = newVal;
+            saveLocalState();
+            msg.style.color = "var(--neon-green)";
+            msg.innerText = "SUCCESS: MASTER DECRYPTION KEY MODIFIED.";
+            document.getElementById("pass-current").value = "";
+            document.getElementById("pass-new").value = "";
+        } else {
+            msg.style.color = "var(--neon-red)";
+            msg.innerText = "ERROR: NEW PASSWORD CANNOT BE EMPTY.";
+        }
+    } else {
+        msg.style.color = "var(--neon-red)";
+        msg.innerText = "ERROR: CURRENT SYSTEM KEY UNMATCHED.";
+    }
+};
 
 // ==========================================
 // ⚽ THREE.JS 3D INTERACTIVE FOOTBALL ENGINE
@@ -375,22 +472,54 @@ document.getElementById("btn-clock-set")?.addEventListener("click", () => {
 // 📊 LIVE SCOREBOARD CORE MATRIX TELEMETRY
 // ==========================================
 function syncDisplayUI() {
-    const scoreHome = document.getElementById("score-home");
-    const scoreAway = document.getElementById("score-away");
-    const matrixHome = document.getElementById("matrix-home-score");
-    const matrixAway = document.getElementById("matrix-away-score");
-    const posHome = document.getElementById("pos-home");
-    const posAway = document.getElementById("pos-away");
-    const posBar = document.getElementById("pos-bar");
-
-    if (scoreHome) scoreHome.innerText = matchState.homeScore;
-    if (scoreAway) scoreAway.innerText = matchState.awayScore;
-    if (matrixHome) matrixHome.innerText = matchState.homeScore;
-    if (matrixAway) matrixAway.innerText = matchState.awayScore;
+    // Scoreboard Core Elements
+    document.getElementById("score-home").innerText = matchState.homeScore;
+    document.getElementById("score-away").innerText = matchState.awayScore;
+    document.getElementById("matrix-home-score").innerText = matchState.homeScore;
+    document.getElementById("matrix-away-score").innerText = matchState.awayScore;
     
-    if (posHome) posHome.innerText = matchState.possession;
-    if (posAway) posAway.innerText = 100 - matchState.possession;
-    if (posBar) posBar.style.width = matchState.possession + "%";
+    // Dynamic Team Names Injection
+    document.getElementById("title-home-team").innerText = matchState.homeTeam;
+    document.getElementById("title-away-team").innerText = matchState.awayTeam;
+    document.getElementById("board-home-name").innerText = matchState.homeTeam;
+    document.getElementById("board-away-name").innerText = matchState.awayTeam;
+    
+    // Dynamic Squad Section Configuration
+    document.getElementById("squad-home-title").innerText = `${matchState.homeTeam} SQUAD`;
+    document.getElementById("squad-away-title").innerText = `${matchState.awayTeam} SQUAD`;
+    document.getElementById("admin-p-home-title").innerHTML = `<i class="fa-solid fa-users"></i> ${matchState.homeTeam} SQUAD`;
+    document.getElementById("admin-p-away-title").innerHTML = `<i class="fa-solid fa-users"></i> ${matchState.awayTeam} SQUAD`;
+    
+    // Ball Possession Text Synchronization
+    document.getElementById("pos-home-name").innerText = matchState.homeTeam;
+    document.getElementById("pos-away-name").innerText = matchState.awayTeam;
+    document.getElementById("pos-home").innerText = matchState.possession;
+    document.getElementById("pos-away").innerText = 100 - matchState.possession;
+    document.getElementById("pos-bar").style.width = matchState.possession + "%";
+
+    // Header Status Sync
+    document.getElementById("display-stream-notice").innerText = matchState.streamNotice;
+    
+    // Moving News Ticker Feed Sync
+    document.getElementById("live-ticker-strip").innerText = matchState.tickerText;
+
+    // Build Player Squad HTML Lists
+    const homeList = document.getElementById("squad-home-list");
+    const awayList = document.getElementById("squad-away-list");
+    
+    let homeHTML = "";
+    matchState.rahulaPlayers.forEach((player, index) => {
+        let num = index === 0 ? "01" : index === 1 ? "07" : index === 2 ? "09" : "10";
+        homeHTML += `<li><span class="jersey-num">${num}</span> ${player}</li>`;
+    });
+    homeList.innerHTML = homeHTML;
+
+    let awayHTML = "";
+    matchState.thomasPlayers.forEach((player, index) => {
+        let num = index === 0 ? "01" : index === 1 ? "10" : index === 2 ? "11" : "08";
+        awayHTML += `<li><span class="jersey-num">${num}</span> ${player}</li>`;
+    });
+    awayList.innerHTML = awayHTML;
 }
 
 window.updateScore = function(side, val) {
@@ -433,6 +562,26 @@ if (db) {
             matchState.homeScore = data.homeScore !== undefined ? data.homeScore : matchState.homeScore;
             matchState.awayScore = data.awayScore !== undefined ? data.awayScore : matchState.awayScore;
             matchState.possession = data.possession !== undefined ? data.possession : matchState.possession;
+        }
+        syncDisplayUI();
+    });
+
+    db.ref('match/meta').on('value', (snapshot) => {
+        const meta = snapshot.val();
+        if (meta) {
+            matchState.homeTeam = meta.homeTeam || matchState.homeTeam;
+            matchState.awayTeam = meta.awayTeam || matchState.awayTeam;
+            matchState.streamNotice = meta.streamNotice || matchState.streamNotice;
+            matchState.tickerText = meta.tickerText || matchState.tickerText;
+        }
+        syncDisplayUI();
+    });
+
+    db.ref('match/players').on('value', (snapshot) => {
+        const pData = snapshot.val();
+        if (pData) {
+            matchState.rahulaPlayers = pData.rahula || matchState.rahulaPlayers;
+            matchState.thomasPlayers = pData.thomas || matchState.thomasPlayers;
         }
         syncDisplayUI();
     });

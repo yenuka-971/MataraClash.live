@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matara Clash | Live Scoring Arena</title>
+    <!-- Cyberpunk Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js & Firebase -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -13,6 +15,7 @@
 </head>
 <body>
 
+    <!-- 🔥 CYBER PRELOADER SUBSYSTEM -->
     <div id="cyber-preloader">
         <div class="loader-matrix">
             <div class="cyber-spinner"></div>
@@ -21,8 +24,10 @@
         </div>
     </div>
 
+    <!-- 🌐 MAIN INTERACTION INTERFACE -->
     <div class="app-container">
         
+        <!-- TOP NAVIGATION DECK -->
         <header class="main-header">
             <div class="logo-zone">
                 <div class="cube-logo"></div>
@@ -30,24 +35,25 @@
             </div>
             <div class="header-controls">
                 <button id="hero-launch-btn" class="cyber-btn btn-small"><i class="fa-solid fa-sliders"></i> CONTROL DECK</button>
-                <div class="status-badge"><span class="pulse-dot"></span>BIG MATCH DECK ACTIVE</div>
+                <div class="status-badge"><span class="pulse-dot"></span><span id="display-stream-notice">BIG MATCH DECK ACTIVE</span></div>
                 <button id="admin-menu-btn" class="icon-btn"><i class="fa-solid fa-shield-halved"></i></button>
             </div>
         </header>
 
+        <!-- HERO SCORE MATRIX VIEW -->
         <section class="hero-matrix-section">
             <div class="hero-layout">
                 
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
-                    <h2>Rahula vs St. Thomas' <br><span class="sub-glow">Live Scoring Arena</span></h2>
+                    <h2><span id="title-home-team">Rahula</span> vs <span id="title-away-team">St. Thomas'</span> <br><span class="sub-glow">Live Scoring Arena</span></h2>
                     <p class="hero-desc">Next-generation sports broadcasting infrastructure powered by Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
                     
                     <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> ACTIVATE OBS MODE</button>
 
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
                         <div class="team-block home">
-                            <span class="team-name">RAHULA</span>
+                            <span id="board-home-name" class="team-name">RAHULA</span>
                             <div id="score-home" class="score-digit">0</div>
                         </div>
                         <div class="timer-block">
@@ -56,7 +62,7 @@
                         </div>
                         <div class="team-block away">
                             <div id="score-away" class="score-digit">0</div>
-                            <span class="team-name">ST. THOMAS'</span>
+                            <span id="board-away-name" class="team-name">ST. THOMAS'</span>
                         </div>
                     </div>
                 </div>
@@ -73,6 +79,7 @@
             </div>
         </section>
 
+        <!-- 📊 CORE MATCH TELEMETRY -->
         <section class="telemetry-section">
             <div class="section-title-wrapper">
                 <h3 class="section-title"><i class="fa-solid fa-chart-bar neon-text-green"></i> LIVE MATCH STATS</h3>
@@ -80,9 +87,9 @@
             </div>
             <div class="stats-card">
                 <div class="possession-header">
-                    <span>RAHULA (<span id="pos-home">50</span>%)</span>
+                    <span><span id="pos-home-name">RAHULA</span> (<span id="pos-home">50</span>%)</span>
                     <span class="neon-text-gold">BALL POSSESSION</span>
-                    <span>ST. THOMAS' (<span id="pos-away">50</span>%)</span>
+                    <span><span id="pos-away-name">ST. THOMAS'</span> (<span id="pos-away">50</span>%)</span>
                 </div>
                 <div class="possession-bar-container">
                     <div id="pos-bar" class="possession-bar-fill"></div>
@@ -90,6 +97,7 @@
             </div>
         </section>
 
+        <!-- 🏃 TEAM LINEUPS SECTION -->
         <section class="lineups-section">
             <div class="section-title-wrapper">
                 <h3 class="section-title"><i class="fa-solid fa-users neon-text-gold"></i> SQUAD SYNC & DETAILS</h3>
@@ -98,33 +106,35 @@
             <div class="lineups-grid">
                 <div class="squad-card team-rahula">
                     <div class="squad-header">
-                        <div class="squad-logo-placeholder logo-rahula">RC</div>
-                        <h4>RAHULA COLLEGE</h4>
+                        <div class="squad-logo-placeholder logo-rahula">HOME</div>
+                        <h4 id="squad-home-title">RAHULA COLLEGE</h4>
                     </div>
-                    <ul class="player-list">
-                        <li><span class="jersey-num">01</span> Player One (GK)</li>
-                        <li><span class="jersey-num">07</span> Player Two (C)</li>
-                        <li><span class="jersey-num">09</span> Player Three</li>
-                        <li><span class="jersey-num">10</span> Player Four</li>
+                    <ul id="squad-home-list" class="player-list">
+                        <!-- Dynamic Injection -->
                     </ul>
                 </div>
                 <div class="squad-card team-thomas">
                     <div class="squad-header">
-                        <div class="squad-logo-placeholder logo-thomas">STC</div>
-                        <h4>ST. THOMAS' COLLEGE</h4>
+                        <div class="squad-logo-placeholder logo-thomas">AWAY</div>
+                        <h4 id="squad-away-title">ST. THOMAS' COLLEGE</h4>
                     </div>
-                    <ul class="player-list">
-                        <li><span class="jersey-num">01</span> Player Alpha (GK)</li>
-                        <li><span class="jersey-num">10</span> Player Beta (C)</li>
-                        <li><span class="jersey-num">11</span> Player Gamma</li>
-                        <li><span class="jersey-num">08</span> Player Delta</li>
+                    <ul id="squad-away-list" class="player-list">
+                        <!-- Dynamic Injection -->
                     </ul>
                 </div>
             </div>
         </section>
 
+        <!-- 📻 REALTIME LIVE NEWS TICKER FEED -->
+        <div class="ticker-wrap">
+            <div class="ticker-move" id="live-ticker-strip">
+                <!-- Dynamic Ticker Text -->
+            </div>
+        </div>
+
     </div>
 
+    <!-- 🛡️ CYBERPUNK ADMIN MODAL OVERLAY -->
     <div id="admin-modal-overlay" class="admin-modal-overlay">
         <div class="admin-modal-window">
             
@@ -133,6 +143,7 @@
                 <button id="admin-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
+            <!-- AUTH GATEWAY -->
             <div id="admin-auth-screen" class="auth-wrapper modal-centered-auth">
                 <p class="auth-instruction">INPUT HIGH-PRIVILEGE SECURITY KEY TO ACCESS COMMAND PANEL.</p>
                 <div class="input-group">
@@ -142,8 +153,10 @@
                 <div id="auth-error-msg" class="error-text" style="margin-top:10px;"></div>
             </div>
 
+            <!-- MAIN ADMIN LAYOUT -->
             <div id="admin-controls-content" class="admin-dashboard-layout" style="display: none;">
                 
+                <!-- Sidebar Tabs -->
                 <div class="admin-modal-sidebar">
                     <button class="admin-tab-link active" onclick="switchAdminTab(event, 'tab-dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-team-settings')"><i class="fa-solid fa-shirt"></i> Team Settings</button>
@@ -154,41 +167,73 @@
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-change-password')"><i class="fa-solid fa-key"></i> Change Password</button>
                 </div>
 
+                <!-- Content Panels -->
                 <div class="admin-modal-content">
                     
+                    <!-- 1. Dashboard -->
                     <div id="tab-dashboard" class="admin-tab-panel active-tab">
                         <h2 class="panel-heading">Dashboard Metrics</h2>
                         <div class="matrix-score-sync-status">
                             MATRIX SCOREBOARD OVERVIEW: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
                         </div>
-                        <p style="color:#94a3b8; margin-top:20px;">Welcome to the Matara Clash Live control deck. The database connection is active and stable.</p>
+                        <p style="color:#94a3b8; margin-top:20px;">Welcome to the Matara Clash Live control deck. All core processes are executing normally inside the client mainframe.</p>
                     </div>
 
+                    <!-- 2. Team Settings (Fully Functional) -->
                     <div id="tab-team-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Team Settings</h2>
-                        <p style="color:#94a3b8;">Modify team names, logos, and base colors here.</p>
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-tags"></i> RENAME TEAMS</h4>
+                            <label class="input-label">Home Team Name</label>
+                            <input type="text" id="input-home-team" placeholder="RAHULA">
+                            <label class="input-label" style="margin-top:10px;">Away Team Name</label>
+                            <input type="text" id="input-away-team" placeholder="ST. THOMAS'">
+                            <button onclick="saveTeamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE TEAM NAMES</button>
+                        </div>
                     </div>
 
+                    <!-- 3. Players Management (Fully Functional - Fixed blank screen from image_410e58.png) -->
                     <div id="tab-players" class="admin-tab-panel">
                         <h2 class="panel-heading">Player Management</h2>
-                        <p style="color:#94a3b8;">Update playing squads and player stats dynamically.</p>
+                        <div class="control-block-group">
+                            <h4 class="group-title" id="admin-p-home-title"><i class="fa-solid fa-users"></i> HOME TEAM SQUAD</h4>
+                            <input type="text" id="p-home-0" placeholder="Player 1" style="margin-bottom:8px;">
+                            <input type="text" id="p-home-1" placeholder="Player 2" style="margin-bottom:8px;">
+                            <input type="text" id="p-home-2" placeholder="Player 3" style="margin-bottom:8px;">
+                            <input type="text" id="p-home-3" placeholder="Player 4">
+                        </div>
+                        <div class="control-block-group">
+                            <h4 class="group-title" id="admin-p-away-title"><i class="fa-solid fa-users"></i> AWAY TEAM SQUAD</h4>
+                            <input type="text" id="p-away-0" placeholder="Player 1" style="margin-bottom:8px;">
+                            <input type="text" id="p-away-1" placeholder="Player 2" style="margin-bottom:8px;">
+                            <input type="text" id="p-away-2" placeholder="Player 3" style="margin-bottom:8px;">
+                            <input type="text" id="p-away-3" placeholder="Player 4">
+                            <button onclick="savePlayerSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">SYNC SQUAD DETAILS</button>
+                        </div>
                     </div>
 
+                    <!-- 4. Stream Settings (Fully Functional) -->
                     <div id="tab-stream-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Stream Settings</h2>
-                        <p style="color:#94a3b8;">Manage stream links, fallback options, and OBS overlays.</p>
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-signal"></i> SYSTEM NOTICES</h4>
+                            <label class="input-label">Header Status Badge Text</label>
+                            <input type="text" id="input-stream-notice" placeholder="BIG MATCH DECK ACTIVE">
+                            <button onclick="saveStreamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE STATUS BADGE</button>
+                        </div>
                     </div>
 
+                    <!-- 5. Match Info -->
                     <div id="tab-match-info" class="admin-tab-panel">
                         <h2 class="panel-heading">Match Info & Controls</h2>
                         
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-gamepad"></i> SCORE TELEMETRY</h4>
                             <div class="admin-grid-2x2">
-                                <button onclick="updateScore('home', 1)" class="control-action-btn score-add">+1 RAHULA</button>
-                                <button onclick="updateScore('away', 1)" class="control-action-btn score-add">+1 STC</button>
-                                <button onclick="updateScore('home', -1)" class="control-action-btn score-sub">-1 RAHULA</button>
-                                <button onclick="updateScore('away', -1)" class="control-action-btn score-sub">-1 STC</button>
+                                <button onclick="updateScore('home', 1)" class="control-action-btn score-add">+1 HOME</button>
+                                <button onclick="updateScore('away', 1)" class="control-action-btn score-add">+1 AWAY</button>
+                                <button onclick="updateScore('home', -1)" class="control-action-btn score-sub">-1 HOME</button>
+                                <button onclick="updateScore('away', -1)" class="control-action-btn score-sub">-1 AWAY</button>
                             </div>
                         </div>
 
@@ -207,23 +252,37 @@
 
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-sliders"></i> INTERACTIVE INJECTORS</h4>
-                            <label class="input-label">Rahula Ball Possession %</label>
+                            <label class="input-label">Home Ball Possession %</label>
                             <div class="input-inline-group">
                                 <input type="number" id="input-possession" min="0" max="100" value="50">
                                 <button onclick="setPossession()" class="cyber-btn btn-small">INJECT STAT</button>
                             </div>
                         </div>
-
                     </div>
 
+                    <!-- 6. Info & Ticker (Fully Functional) -->
                     <div id="tab-info-ticker" class="admin-tab-panel">
                         <h2 class="panel-heading">Info & Ticker</h2>
-                        <p style="color:#94a3b8;">Control the scrolling news ticker at the bottom of the stream.</p>
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-scroll"></i> NEWS TICKER FEED</h4>
+                            <label class="input-label">Scrolling Banner Message</label>
+                            <textarea id="input-ticker-text" rows="4" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.12); color:#e2e8f0; width:100%; border-radius:4px; padding:10px; font-family:var(--font-prose); resize:none;"></textarea>
+                            <button onclick="saveTickerSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">BROADCAST TICKER</button>
+                        </div>
                     </div>
 
+                    <!-- 7. Change Password (Fully Functional) -->
                     <div id="tab-change-password" class="admin-tab-panel">
                         <h2 class="panel-heading">Change Password</h2>
-                        <p style="color:#94a3b8;">Modify the system master key securely.</p>
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-lock"></i> MASTER DECRYPTION KEY</h4>
+                            <label class="input-label">Current Master Key</label>
+                            <input type="password" id="pass-current" placeholder="ENTER CURRENT KEY">
+                            <label class="input-label" style="margin-top:10px;">New Master Key</label>
+                            <input type="password" id="pass-new" placeholder="ENTER NEW KEY">
+                            <button onclick="savePasswordSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">CHANGE PASSWORD</button>
+                            <div id="pass-msg" class="error-text" style="margin-top:10px;"></div>
+                        </div>
                     </div>
 
                 </div>

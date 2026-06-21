@@ -1040,3 +1040,24 @@ body.live-match-body {
         border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 }
+/* ==========================================================================
+   🌀 HOLOGRAPHIC BALL LOGO STYLES
+   ========================================================================== */
+.cyber-ball-logo {
+    width: 36px;
+    height: 36px;
+    animation: rotateLogoHUD 15s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1));
+    transition: all 0.3s ease;
+}
+
+.cyber-ball-logo:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+    cursor: pointer;
+}
+
+@keyframes rotateLogoHUD {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

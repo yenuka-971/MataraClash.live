@@ -52,11 +52,10 @@ function loadLocalState() {
     }
 }
 
-// Load cache immediately
 loadLocalState();
 
 // ==========================================
-// ⚡ FAIL-SAFE PRELOADER SUBSYSTEM (FIXED 00% STUCK)
+// ⚡ FAIL-SAFE PRELOADER SUBSYSTEM
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
     const pctDisplay = document.getElementById("load-pct");
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 else statusDisplay.innerText = logs[2];
             }
         }
-    }, 45); // Cleaned processing interval speed
+    }, 45); 
 });
 
 // ==========================================
@@ -110,28 +109,36 @@ if (obsBtn) {
     obsBtn.addEventListener("click", () => {
         document.body.classList.toggle("obs-stream-active");
         if(document.body.classList.contains("obs-stream-active")) {
-            obsBtn.innerHTML = `<i class="fa-solid fa-window-restore"></i> EXIT OBS`;
+            obsBtn.innerHTML = `<i class="fa-solid fa-window-restore"></i> EXIT OBS MODE`;
         } else {
-            obsBtn.innerHTML = `<i class="fa-solid fa-video"></i> OBS MODE`;
+            obsBtn.innerHTML = `<i class="fa-solid fa-video"></i> ACTIVATE OBS MODE`;
         }
     });
 }
 
 // ==========================================
-// 🛡️ SLIDING SIDEBAR SECURITY SYSTEMS
+// 🛡️ NEW CYBERPUNK ADMIN MODAL SYSTEM
 // ==========================================
-const sidebar = document.getElementById("admin-sidebar");
-const openBtn = document.getElementById("admin-menu-btn");
-const closeBtn = document.getElementById("admin-close-btn");
-const launchBtn = document.getElementById("hero-launch-btn");
+const adminModalOverlay = document.getElementById("admin-modal-overlay");
+const openAdminHeaderBtn = document.getElementById("admin-menu-btn");
+const openAdminHeroBtn = document.getElementById("hero-launch-btn");
+const closeAdminBtn = document.getElementById("admin-close-btn");
 
-const openAdminSidebar = () => sidebar?.classList.add("open");
-const closeAdminSidebar = () => sidebar?.classList.remove("open");
+const openModal = () => { if(adminModalOverlay) adminModalOverlay.classList.add("open"); };
+const closeModal = () => { if(adminModalOverlay) adminModalOverlay.classList.remove("open"); };
 
-if (openBtn) openBtn.addEventListener("click", openAdminSidebar);
-if (closeBtn) closeBtn.addEventListener("click", closeAdminSidebar);
-if (launchBtn) launchBtn.addEventListener("click", openAdminSidebar);
+if (openAdminHeaderBtn) openAdminHeaderBtn.addEventListener("click", openModal);
+if (openAdminHeroBtn) openAdminHeroBtn.addEventListener("click", openModal);
+if (closeAdminBtn) closeAdminBtn.addEventListener("click", closeModal);
 
+// Close modal if clicked outside the window
+if (adminModalOverlay) {
+    adminModalOverlay.addEventListener("click", (e) => {
+        if (e.target === adminModalOverlay) closeModal();
+    });
+}
+
+// Security Auth Gateway Logic
 const loginBtn = document.getElementById("admin-login-btn");
 const authScreen = document.getElementById("admin-auth-screen");
 const controlsContent = document.getElementById("admin-controls-content");
@@ -142,14 +149,27 @@ if (loginBtn) {
         const adminPassInput = document.getElementById("admin-pass");
         if (!adminPassInput) return;
         
+        // Put your password here (Currently "yenuka is back")
         if (adminPassInput.value === "yenuka is back") {
             if (authScreen) authScreen.style.display = "none";
-            if (controlsContent) controlsContent.style.display = "block";
+            if (controlsContent) controlsContent.style.display = "flex"; // Show Dashboard
             if (errorMsg) errorMsg.innerText = "";
         } else {
             if (errorMsg) errorMsg.innerText = "ACCESS DENIED: INVALID PRIVILEGE KEY";
         }
     });
+}
+
+// Categories Tab Switcher Logic
+window.switchAdminTab = function(event, tabId) {
+    const tabPanels = document.querySelectorAll('.admin-tab-panel');
+    tabPanels.forEach(panel => panel.classList.remove('active-tab'));
+
+    const tabLinks = document.querySelectorAll('.admin-tab-link');
+    tabLinks.forEach(link => link.classList.remove('active'));
+
+    document.getElementById(tabId).classList.add('active-tab');
+    event.currentTarget.classList.add('active');
 }
 
 // ==========================================
@@ -180,7 +200,6 @@ function init3DPlayground() {
     dirLight.position.set(10, 10, 10);
     scene.add(dirLight);
 
-    // Wireframe Globe Mesh
     const globeGeo = new THREE.IcosahedronGeometry(4.8, 2);
     const globeMat = new THREE.MeshBasicMaterial({
         color: 0xFFD700,
@@ -191,7 +210,6 @@ function init3DPlayground() {
     globeMesh = new THREE.Mesh(globeGeo, globeMat);
     scene.add(globeMesh);
 
-    // Cyber Football Structure
     footballGroup = new THREE.Group();
     
     const fbInnerGeo = new THREE.SphereGeometry(4.5, 32, 32);
@@ -213,7 +231,6 @@ function init3DPlayground() {
     footballGroup.visible = false;
     scene.add(footballGroup);
 
-    // Background Particles
     const particleGeo = new THREE.BufferGeometry();
     const particleCount = 200;
     const posArray = new Float32Array(particleCount * 3);
@@ -227,7 +244,6 @@ function init3DPlayground() {
 
     function animate() {
         requestAnimationFrame(animate);
-        
         if (!isFootballMode) {
             globeMesh.rotation.y += 0.006;
             globeMesh.rotation.x += 0.003;
@@ -235,7 +251,6 @@ function init3DPlayground() {
             footballGroup.rotation.y += 0.012;
             footballGroup.rotation.x += 0.004;
         }
-        
         particleMesh.rotation.y -= 0.001;
         renderer.render(scene, camera);
     }

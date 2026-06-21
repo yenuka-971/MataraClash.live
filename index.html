@@ -29,9 +29,9 @@
                 <h1>MATARA CLASH <span class="neon-text-green">LIVE</span></h1>
             </div>
             <div class="header-controls">
-                <button id="obs-mode-btn" class="cyber-btn btn-small"><i class="fa-solid fa-video"></i> OBS MODE</button>
+                <button id="hero-launch-btn" class="cyber-btn btn-small"><i class="fa-solid fa-sliders"></i> CONTROL DECK</button>
                 <div class="status-badge"><span class="pulse-dot"></span>BIG MATCH DECK ACTIVE</div>
-                <button id="admin-menu-btn" class="icon-btn"><i class="fa-solid fa-sliders"></i></button>
+                <button id="admin-menu-btn" class="icon-btn"><i class="fa-solid fa-shield-halved"></i></button>
             </div>
         </header>
 
@@ -43,7 +43,7 @@
                     <h2>Rahula vs St. Thomas' <br><span class="sub-glow">Live Scoring Arena</span></h2>
                     <p class="hero-desc">Next-generation sports broadcasting infrastructure powered by Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
                     
-                    <button id="hero-launch-btn" class="cyber-btn btn-primary">Launch Control Deck <i class="fa-solid fa-link"></i></button>
+                    <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> ACTIVATE OBS MODE</button>
 
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
                         <div class="team-block home">
@@ -125,58 +125,110 @@
 
     </div>
 
-    <div id="admin-sidebar" class="sidebar-matrix">
-        <div class="sidebar-header">
-            <h3><i class="fa-solid fa-user-shield neon-text-gold"></i> CORE CONTROLS</h3>
-            <button id="admin-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
-        <div id="admin-auth-screen" class="auth-wrapper">
-            <p class="auth-instruction">INPUT HIGH-PRIVILEGE SECURITY KEY TO ACCESS COMMAND PANEL.</p>
-            <div class="input-group">
-                <input type="password" id="admin-pass" placeholder="ENTER PRIVILEGE KEY...">
-                <button id="admin-login-btn" class="cyber-btn btn-primary">DECRYPT</button>
-            </div>
-            <div id="auth-error-msg" class="error-text"></div>
-        </div>
-
-        <div id="admin-controls-content" class="controls-wrapper" style="display: none;">
+    <div id="admin-modal-overlay" class="admin-modal-overlay">
+        <div class="admin-modal-window">
             
-            <div class="control-block-group">
-                <h4 class="group-title"><i class="fa-solid fa-gamepad"></i> SCORE TELEMETRY</h4>
-                <div class="admin-grid-2x2">
-                    <button onclick="updateScore('home', 1)" class="control-action-btn score-add">+1 RAHULA</button>
-                    <button onclick="updateScore('away', 1)" class="control-action-btn score-add">+1 STC</button>
-                    <button onclick="updateScore('home', -1)" class="control-action-btn score-sub">-1 RAHULA</button>
-                    <button onclick="updateScore('away', -1)" class="control-action-btn score-sub">-1 STC</button>
-                </div>
+            <div class="modal-top-bar">
+                <h3><i class="fa-solid fa-user-shield neon-text-gold"></i> COMMAND CENTER</h3>
+                <button id="admin-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <div class="control-block-group">
-                <h4 class="group-title"><i class="fa-solid fa-stopwatch"></i> MATCH CLOCK METRICS</h4>
-                <div class="matrix-score-display-small">DECK CLOCK: <span id="deck-timer" class="neon-text-green">20:00</span></div>
-                <div class="admin-grid-2x1">
-                    <button id="btn-clock-start" class="control-action-btn clock-start"><i class="fa-solid fa-play"></i> START TIME</button>
-                    <button id="btn-clock-pause" class="control-action-btn clock-pause"><i class="fa-solid fa-pause"></i> PAUSE TIME</button>
+            <div id="admin-auth-screen" class="auth-wrapper modal-centered-auth">
+                <p class="auth-instruction">INPUT HIGH-PRIVILEGE SECURITY KEY TO ACCESS COMMAND PANEL.</p>
+                <div class="input-group">
+                    <input type="password" id="admin-pass" placeholder="ENTER PRIVILEGE KEY...">
+                    <button id="admin-login-btn" class="cyber-btn btn-primary">DECRYPT</button>
                 </div>
-                <div class="input-inline-group">
-                    <input type="text" id="custom-time-input" placeholder="MM:SS (e.g. 20:00)">
-                    <button id="btn-clock-set" class="cyber-btn btn-small">SET CLOCK</button>
-                </div>
+                <div id="auth-error-msg" class="error-text" style="margin-top:10px;"></div>
             </div>
 
-            <div class="control-block-group">
-                <h4 class="group-title"><i class="fa-solid fa-sliders"></i> INTERACTIVE INJECTORS</h4>
-                <label class="input-label">Rahula Ball Possession %</label>
-                <div class="input-inline-group">
-                    <input type="number" id="input-possession" min="0" max="100" value="50">
-                    <button onclick="setPossession()" class="cyber-btn btn-small">INJECT STAT</button>
+            <div id="admin-controls-content" class="admin-dashboard-layout" style="display: none;">
+                
+                <div class="admin-modal-sidebar">
+                    <button class="admin-tab-link active" onclick="switchAdminTab(event, 'tab-dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-team-settings')"><i class="fa-solid fa-shirt"></i> Team Settings</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-players')"><i class="fa-solid fa-users"></i> Players</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-stream-settings')"><i class="fa-solid fa-tower-broadcast"></i> Stream Settings</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-match-info')"><i class="fa-solid fa-trophy"></i> Match Info</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-info-ticker')"><i class="fa-solid fa-closed-captioning"></i> Info & Ticker</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-change-password')"><i class="fa-solid fa-key"></i> Change Password</button>
+                </div>
+
+                <div class="admin-modal-content">
+                    
+                    <div id="tab-dashboard" class="admin-tab-panel active-tab">
+                        <h2 class="panel-heading">Dashboard Metrics</h2>
+                        <div class="matrix-score-sync-status">
+                            MATRIX SCOREBOARD OVERVIEW: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
+                        </div>
+                        <p style="color:#94a3b8; margin-top:20px;">Welcome to the Matara Clash Live control deck. The database connection is active and stable.</p>
+                    </div>
+
+                    <div id="tab-team-settings" class="admin-tab-panel">
+                        <h2 class="panel-heading">Team Settings</h2>
+                        <p style="color:#94a3b8;">Modify team names, logos, and base colors here.</p>
+                    </div>
+
+                    <div id="tab-players" class="admin-tab-panel">
+                        <h2 class="panel-heading">Player Management</h2>
+                        <p style="color:#94a3b8;">Update playing squads and player stats dynamically.</p>
+                    </div>
+
+                    <div id="tab-stream-settings" class="admin-tab-panel">
+                        <h2 class="panel-heading">Stream Settings</h2>
+                        <p style="color:#94a3b8;">Manage stream links, fallback options, and OBS overlays.</p>
+                    </div>
+
+                    <div id="tab-match-info" class="admin-tab-panel">
+                        <h2 class="panel-heading">Match Info & Controls</h2>
+                        
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-gamepad"></i> SCORE TELEMETRY</h4>
+                            <div class="admin-grid-2x2">
+                                <button onclick="updateScore('home', 1)" class="control-action-btn score-add">+1 RAHULA</button>
+                                <button onclick="updateScore('away', 1)" class="control-action-btn score-add">+1 STC</button>
+                                <button onclick="updateScore('home', -1)" class="control-action-btn score-sub">-1 RAHULA</button>
+                                <button onclick="updateScore('away', -1)" class="control-action-btn score-sub">-1 STC</button>
+                            </div>
+                        </div>
+
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-stopwatch"></i> MATCH CLOCK METRICS</h4>
+                            <div class="matrix-score-display-small">DECK CLOCK: <span id="deck-timer" class="neon-text-green">20:00</span></div>
+                            <div class="admin-grid-2x1">
+                                <button id="btn-clock-start" class="control-action-btn clock-start"><i class="fa-solid fa-play"></i> START TIME</button>
+                                <button id="btn-clock-pause" class="control-action-btn clock-pause"><i class="fa-solid fa-pause"></i> PAUSE TIME</button>
+                            </div>
+                            <div class="input-inline-group" style="margin-top:10px;">
+                                <input type="text" id="custom-time-input" placeholder="MM:SS (e.g. 20:00)">
+                                <button id="btn-clock-set" class="cyber-btn btn-small">SET CLOCK</button>
+                            </div>
+                        </div>
+
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-sliders"></i> INTERACTIVE INJECTORS</h4>
+                            <label class="input-label">Rahula Ball Possession %</label>
+                            <div class="input-inline-group">
+                                <input type="number" id="input-possession" min="0" max="100" value="50">
+                                <button onclick="setPossession()" class="cyber-btn btn-small">INJECT STAT</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div id="tab-info-ticker" class="admin-tab-panel">
+                        <h2 class="panel-heading">Info & Ticker</h2>
+                        <p style="color:#94a3b8;">Control the scrolling news ticker at the bottom of the stream.</p>
+                    </div>
+
+                    <div id="tab-change-password" class="admin-tab-panel">
+                        <h2 class="panel-heading">Change Password</h2>
+                        <p style="color:#94a3b8;">Modify the system master key securely.</p>
+                    </div>
+
                 </div>
             </div>
-
-            <div class="matrix-score-sync-status">
-                MATRIX SCOREBOARD: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
-            </div>
+            
         </div>
     </div>
 

@@ -500,8 +500,15 @@ function syncDisplayUI() {
     // Header Status Sync
     document.getElementById("display-stream-notice").innerText = matchState.streamNotice;
     
-    // Moving News Ticker Feed Sync
-    document.getElementById("live-ticker-strip").innerText = matchState.tickerText;
+    // --------------------------------------------------------------------------
+    // ⚡ මේක තමයි වෙනස් වුණේ: Ticker එක Seamless Infinite Loop වෙන්න මැසේජ් එක දෙපාරක් දානවා
+    // --------------------------------------------------------------------------
+    const tickerStrip = document.getElementById("live-ticker-strip");
+    if (tickerStrip) {
+        const loopContent = `<span class="ticker-item">${matchState.tickerText}</span>`;
+        tickerStrip.innerHTML = loopContent + loopContent;
+    }
+    // --------------------------------------------------------------------------
 
     // Build Player Squad HTML Lists
     const homeList = document.getElementById("squad-home-list");

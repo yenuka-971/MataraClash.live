@@ -479,7 +479,7 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 /* ==========================================================================
-   📻 NEWS TICKER SYSTEM SCROLL BAR
+   📻 NEWS TICKER SYSTEM SCROLL BAR (SEAMLESS INFINITE LOOP UPDATE)
    ========================================================================== */
 .ticker-wrap {
     width: 100%;
@@ -495,9 +495,8 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 .ticker-move {
-    display: inline-block;
-    white-space: nowrap;
-    padding-right: 100%;
+    display: flex; /* Updated to flex for smooth side-by-side looping */
+    width: max-content;
     animation: tickerLoop 25s linear infinite;
     font-family: var(--font-matrix);
     font-size: 0.9rem;
@@ -506,9 +505,16 @@ body.obs-stream-active .live-scoreboard-board {
     text-shadow: var(--cyber-glow);
 }
 
+.ticker-item {
+    padding-right: 150px; /* Space between the repeating text */
+    white-space: nowrap;
+    min-width: 100vw; /* Ensures it perfectly fills the screen */
+    box-sizing: border-box;
+}
+
 @keyframes tickerLoop {
     0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); } /* Smooth gapless reset */
 }
 
 /* ==========================================================================

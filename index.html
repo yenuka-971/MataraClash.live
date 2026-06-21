@@ -40,10 +40,17 @@
                 
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
+                    
+                    <!-- 🆕 MATCH DURATION DISPLAY (NEW) -->
+                    <div class="match-elapsed-display">
+                        MATCH DURATION: <span id="main-elapsed-timer" class="neon-text-gold">00:00</span>
+                    </div>
+
                     <h2><span id="title-home-team">Rahula</span> vs <span id="title-away-team">St. Thomas'</span> <br><span class="sub-glow">Live Scoring Arena</span></h2>
                     <p class="hero-desc">Next-generation sports broadcasting infrastructure powered by Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
                     
-                    <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> ACTIVATE OBS MODE</button>
+                    <!-- LIVE MATCH BUTTON - OPENS live.html -->
+                    <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> LIVE MATCH</button>
 
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
                         <div class="team-block home">
@@ -67,6 +74,13 @@
                             <span class="hud-tag">ENGINE: TELEMETRY SYNC</span>
                             <button id="btn-morph-toggle" class="hud-action-btn">TRANSFORM 3D</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- YouTube Live Stream Feed (Main Page) -->
+                <div class="stream-feed-wrapper" id="youtube-stream-container" style="grid-column: 1 / -1; display: none;">
+                    <div class="video-aspect-box">
+                        <iframe id="youtube-iframe" src="" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
 
@@ -177,29 +191,39 @@
                         <h2 class="panel-heading">Player Management</h2>
                         <div class="control-block-group">
                             <h4 class="group-title" id="admin-p-home-title"><i class="fa-solid fa-users"></i> HOME TEAM SQUAD</h4>
-                            <input type="text" id="p-home-0" placeholder="Player 1" style="margin-bottom:8px;">
-                            <input type="text" id="p-home-1" placeholder="Player 2" style="margin-bottom:8px;">
-                            <input type="text" id="p-home-2" placeholder="Player 3" style="margin-bottom:8px;">
-                            <input type="text" id="p-home-3" placeholder="Player 4">
+                            <div id="home-players-container"></div>
+                            <button onclick="addHomePlayer()" class="cyber-btn btn-small" style="width:100%;"><i class="fa-solid fa-plus"></i> ADD HOME PLAYER</button>
                         </div>
                         <div class="control-block-group">
                             <h4 class="group-title" id="admin-p-away-title"><i class="fa-solid fa-users"></i> AWAY TEAM SQUAD</h4>
-                            <input type="text" id="p-away-0" placeholder="Player 1" style="margin-bottom:8px;">
-                            <input type="text" id="p-away-1" placeholder="Player 2" style="margin-bottom:8px;">
-                            <input type="text" id="p-away-2" placeholder="Player 3" style="margin-bottom:8px;">
-                            <input type="text" id="p-away-3" placeholder="Player 4">
-                            <button onclick="savePlayerSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">SYNC SQUAD DETAILS</button>
+                            <div id="away-players-container"></div>
+                            <button onclick="addAwayPlayer()" class="cyber-btn btn-small" style="width:100%;"><i class="fa-solid fa-plus"></i> ADD AWAY PLAYER</button>
                         </div>
+                        <button onclick="savePlayerSettings()" class="cyber-btn btn-primary" style="margin-top:10px; width:100%;">SYNC SQUAD DETAILS</button>
                     </div>
 
                     <div id="tab-stream-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Stream Settings</h2>
+                        
+                        <!-- SYSTEM NOTICES -->
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-signal"></i> SYSTEM NOTICES</h4>
                             <label class="input-label">Header Status Badge Text</label>
                             <input type="text" id="input-stream-notice" placeholder="BIG MATCH DECK ACTIVE">
                             <button onclick="saveStreamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE STATUS BADGE</button>
                         </div>
+
+                        <!-- YOUTUBE LIVE EMBED -->
+                        <div class="control-block-group" style="margin-top: 15px;">
+                            <h4 class="group-title"><i class="fa-brands fa-youtube"></i> YOUTUBE LIVE EMBED</h4>
+                            <label class="input-label">YouTube Live URL or Video ID</label>
+                            <input type="text" id="input-youtube-url" placeholder="https://www.youtube.com/watch?v=... or Video ID">
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <button onclick="saveYoutubeStream()" class="cyber-btn btn-primary" style="width: 100%;">LOAD STREAM</button>
+                                <button onclick="closeYoutubeStream()" class="cyber-btn btn-small" style="width: 50%;">REMOVE</button>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div id="tab-match-info" class="admin-tab-panel">
@@ -226,6 +250,17 @@
                                 <input type="text" id="custom-time-input" placeholder="MM:SS (e.g. 20:00)">
                                 <button id="btn-clock-set" class="cyber-btn btn-small">SET CLOCK</button>
                             </div>
+                        </div>
+
+                        <!-- 🆕 MATCH DURATION (ELAPSED) CONTROLS (NEW) -->
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-clock"></i> MATCH DURATION (ELAPSED)</h4>
+                            <div class="matrix-score-display-small">ELAPSED: <span id="deck-elapsed" class="neon-text-green">00:00</span></div>
+                            <div class="admin-grid-2x1">
+                                <button id="btn-elapsed-start" class="control-action-btn clock-start"><i class="fa-solid fa-play"></i> START MATCH</button>
+                                <button id="btn-elapsed-pause" class="control-action-btn clock-pause"><i class="fa-solid fa-pause"></i> PAUSE MATCH</button>
+                            </div>
+                            <button id="btn-elapsed-reset" class="control-action-btn" style="background:rgba(255,42,95,0.1); border-color:rgba(255,42,95,0.3); color:var(--neon-red); margin-top:5px;">RESET MATCH</button>
                         </div>
 
                         <div class="control-block-group">

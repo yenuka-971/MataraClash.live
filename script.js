@@ -2,13 +2,13 @@
 // 🔥 CENTRAL FIREBASE MATRIX CONFIGURATION
 // ==========================================
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    databaseURL: "YOUR_DATABASE_URL",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCXEiDTxnKRPd1yT-doEKxNpZJYPwWV_Jg",
+    authDomain: "matara-clash-live.firebaseapp.com",
+    databaseURL: "https://matara-clash-live-default-rtdb.firebaseio.com", // ✅ මෙය එකතු කරන ලදී
+    projectId: "matara-clash-live",
+    storageBucket: "matara-clash-live.firebasestorage.app",
+    messagingSenderId: "560346687609",
+    appId: "1:560346687609:web:ef7f9ceaf866db0fefcca8"
 };
 
 let db = null;
@@ -435,23 +435,37 @@ function renderPlayerInputs() {
     document.getElementById("admin-p-away-title").innerHTML = `<i class="fa-solid fa-users"></i> ${matchState.awayTeam} SQUAD (${matchState.thomasPlayers.length})`;
 }
 
+// 🆕 UPDATED: Now auto-syncs to Firebase immediately without needing to click "SYNC SQUAD DETAILS"
 window.addHomePlayer = function() {
     matchState.rahulaPlayers.push(`Player ${matchState.rahulaPlayers.length + 1}`);
     saveLocalState();
     renderPlayerInputs();
+    // Auto-sync to Firebase
+    if (db) {
+        db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
+    }
 };
 
 window.addAwayPlayer = function() {
     matchState.thomasPlayers.push(`Player ${matchState.thomasPlayers.length + 1}`);
     saveLocalState();
     renderPlayerInputs();
+    // Auto-sync to Firebase
+    if (db) {
+        db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
+    }
 };
 
+// 🆕 UPDATED: Now auto-removes from Firebase immediately
 window.removeHomePlayer = function(index) {
     if (matchState.rahulaPlayers.length > 1) {
         matchState.rahulaPlayers.splice(index, 1);
         saveLocalState();
         renderPlayerInputs();
+        // Auto-sync to Firebase (delete the player from DB)
+        if (db) {
+            db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
+        }
     } else {
         alert("At least one player must remain.");
     }
@@ -462,6 +476,10 @@ window.removeAwayPlayer = function(index) {
         matchState.thomasPlayers.splice(index, 1);
         saveLocalState();
         renderPlayerInputs();
+        // Auto-sync to Firebase
+        if (db) {
+            db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
+        }
     } else {
         alert("At least one player must remain.");
     }
@@ -1205,6 +1223,7 @@ window.saveYoutubeStream = function() {
     }
 };
 
+// 🆕 CLOSE YOUTUBE - REMOVES FROM DATABASE (already existed, no changes needed)
 window.closeYoutubeStream = function() {
     matchState.youtubeUrl = "";
     document.getElementById("input-youtube-url").value = "";
@@ -1229,3 +1248,92 @@ function renderYoutubeVideo() {
         iframe.src = "";
     }
 }
+
+// ==========================================
+// 🚀 RESET / CLEAR ALL MATCH DATA (NEW)
+// ==========================================
+window.resetAllMatchData = function() {
+    if (!db) { 
+        alert("❌ Firebase is not connected."); 
+        return; 
+    }
+
+    // Confirmation dialog to prevent accidental reset
+    if (!confirm("⚠️ WARNING: This will reset ALL match data (scores, timers, players, logos) to default values. Continue?")) {
+        return;
+    }
+
+    // Default values
+    const defaultData = {
+        homeScore: 0,
+        awayScore: 0,
+        possession: 50
+    };
+
+    const defaultMeta = {
+        homeTeam: "RAHULA",
+        awayTeam: "ST. THOMAS'",
+        homeLogo: "",
+        awayLogo: "",
+        streamNotice: "BIG MATCH DECK ACTIVE",
+        tickerText: "WELCOME TO THE GOLDEN-BLUE ENCOUNTER 2026 Live Broadcast...",
+        youtubeUrl: ""
+    };
+
+    const defaultPlayers = {
+        rahula: ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"],
+        thomas: ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"]
+    };
+
+    const defaultTimer = {
+        totalSeconds: 1200,
+        isClockRunning: false
+    };
+
+    const defaultElapsed = {
+        matchElapsedSeconds: 0,
+        isMatchRunning: false
+    };
+
+    // Push defaults to Firebase
+    db.ref('match/').update(defaultData);
+    db.ref('match/meta').update(defaultMeta);
+    db.ref('match/players').update(defaultPlayers);
+    db.ref('match/timer').update(defaultTimer);
+    db.ref('match/elapsed').update(defaultElapsed);
+
+    // Also reset local matchState to reflect changes immediately
+    matchState.homeScore = 0;
+    matchState.awayScore = 0;
+    matchState.possession = 50;
+    matchState.homeTeam = "RAHULA";
+    matchState.awayTeam = "ST. THOMAS'";
+    matchState.homeLogo = "";
+    matchState.awayLogo = "";
+    matchState.streamNotice = "BIG MATCH DECK ACTIVE";
+    matchState.tickerText = "WELCOME TO THE GOLDEN-BLUE ENCOUNTER 2026 Live Broadcast...";
+    matchState.youtubeUrl = "";
+    matchState.rahulaPlayers = ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"];
+    matchState.thomasPlayers = ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"];
+    matchState.totalSeconds = 1200;
+    matchState.isClockRunning = false;
+    matchState.matchElapsedSeconds = 0;
+    matchState.isMatchRunning = false;
+
+    // Stop any running intervals
+    clearInterval(timerInterval);
+    clearInterval(matchInterval);
+
+    saveLocalState();
+    syncDisplayUI();
+    updateTimerUI();
+    updateElapsedUI();
+
+    // Close any open admin panels
+    if (adminModalOverlay) {
+        closeModal();
+    }
+
+    alert("✅ All match data has been reset to default values and synced to Firebase.\n\nAll connected pages will update automatically.");
+    console.log("🔥 Match data reset to defaults.");
+};

@@ -4,7 +4,7 @@
 const firebaseConfig = {
     apiKey: "AIzaSyCXEiDTxnKRPd1yT-doEKxNpZJYPwWV_Jg",
     authDomain: "matara-clash-live.firebaseapp.com",
-    databaseURL: "https://matara-clash-live-default-rtdb.firebaseio.com", // ✅ මෙය එකතු කරන ලදී
+    databaseURL: "https://matara-clash-live-default-rtdb.firebaseio.com",
     projectId: "matara-clash-live",
     storageBucket: "matara-clash-live.firebasestorage.app",
     messagingSenderId: "560346687609",
@@ -29,18 +29,14 @@ let matchState = {
     homeScore: 0,
     awayScore: 0,
     possession: 50,
-    totalSeconds: 1200, // Countdown timer (20:00)
+    totalSeconds: 1200,
     isClockRunning: false,
-    // ===== Elapsed Timer State =====
     matchElapsedSeconds: 0,
     isMatchRunning: false,
-    // =======================================
     homeTeam: "RAHULA",
     awayTeam: "ST. THOMAS'",
-    // ===== 🆕 Logos =====
     homeLogo: "",
     awayLogo: "",
-    // =====================
     rahulaPlayers: ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"],
     thomasPlayers: ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"],
     streamNotice: "BIG MATCH DECK ACTIVE",
@@ -118,17 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ==========================================
-// 📺 ORIGINAL OBS MODE TOGGLE (FULLY PRESERVED - NOT REDUCED)
+// 📺 ORIGINAL OBS MODE TOGGLE
 // ==========================================
 const obsBtn = document.getElementById("obs-mode-btn");
 if (obsBtn) {
-    // UPDATED: Now opens live.html in a new tab/window
     obsBtn.addEventListener("click", () => {
         window.open('live.html', '_blank');
     });
 }
 
-// 🟢 PRESERVED: Original OBS toggle function (kept to not reduce code)
 function toggleObsMode() {
     document.body.classList.toggle("obs-stream-active");
     const obsBtn = document.getElementById("obs-mode-btn");
@@ -140,15 +134,11 @@ function toggleObsMode() {
         }
     }
 }
-// Note: toggleObsMode is not bound to the button anymore, but the function exists.
 
 // ==========================================
-// 🆕 ORIGINAL POPUP FUNCTION (FULLY PRESERVED - NOT REDUCED)
+// 🆕 ORIGINAL POPUP FUNCTION (FULLY PRESERVED)
 // ==========================================
 function openLiveMatchWindow() {
-    // This function is intentionally kept as it was originally.
-    // It is no longer called by the button, but it remains in the codebase 
-    // to ensure no code is reduced, as per the user's request.
     const home = matchState.homeTeam;
     const away = matchState.awayTeam;
     const homeScore = matchState.homeScore;
@@ -157,7 +147,6 @@ function openLiveMatchWindow() {
     const youtubeId = matchState.youtubeUrl;
     const videoSrc = youtubeId ? `https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=0&controls=1&rel=0` : '';
 
-    // Format elapsed time for initial display
     let mins = Math.floor(matchState.matchElapsedSeconds / 60);
     let secs = matchState.matchElapsedSeconds % 60;
     let elapsedStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
@@ -376,7 +365,6 @@ if (adminModalOverlay) {
     });
 }
 
-// Security Auth Gateway Logic
 const loginBtn = document.getElementById("admin-login-btn");
 const authScreen = document.getElementById("admin-auth-screen");
 const controlsContent = document.getElementById("admin-controls-content");
@@ -406,7 +394,6 @@ function renderPlayerInputs() {
     const awayContainer = document.getElementById("away-players-container");
     if (!homeContainer || !awayContainer) return;
 
-    // Home Players
     let homeHTML = '';
     matchState.rahulaPlayers.forEach((player, index) => {
         homeHTML += `
@@ -418,7 +405,6 @@ function renderPlayerInputs() {
     });
     homeContainer.innerHTML = homeHTML;
 
-    // Away Players
     let awayHTML = '';
     matchState.thomasPlayers.forEach((player, index) => {
         awayHTML += `
@@ -430,17 +416,15 @@ function renderPlayerInputs() {
     });
     awayContainer.innerHTML = awayHTML;
 
-    // Update titles
     document.getElementById("admin-p-home-title").innerHTML = `<i class="fa-solid fa-users"></i> ${matchState.homeTeam} SQUAD (${matchState.rahulaPlayers.length})`;
     document.getElementById("admin-p-away-title").innerHTML = `<i class="fa-solid fa-users"></i> ${matchState.awayTeam} SQUAD (${matchState.thomasPlayers.length})`;
 }
 
-// 🆕 UPDATED: Now auto-syncs to Firebase immediately without needing to click "SYNC SQUAD DETAILS"
+// 🆕 Auto-sync to Firebase immediately
 window.addHomePlayer = function() {
     matchState.rahulaPlayers.push(`Player ${matchState.rahulaPlayers.length + 1}`);
     saveLocalState();
     renderPlayerInputs();
-    // Auto-sync to Firebase
     if (db) {
         db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
     }
@@ -450,19 +434,16 @@ window.addAwayPlayer = function() {
     matchState.thomasPlayers.push(`Player ${matchState.thomasPlayers.length + 1}`);
     saveLocalState();
     renderPlayerInputs();
-    // Auto-sync to Firebase
     if (db) {
         db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
     }
 };
 
-// 🆕 UPDATED: Now auto-removes from Firebase immediately
 window.removeHomePlayer = function(index) {
     if (matchState.rahulaPlayers.length > 1) {
         matchState.rahulaPlayers.splice(index, 1);
         saveLocalState();
         renderPlayerInputs();
-        // Auto-sync to Firebase (delete the player from DB)
         if (db) {
             db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
         }
@@ -476,7 +457,6 @@ window.removeAwayPlayer = function(index) {
         matchState.thomasPlayers.splice(index, 1);
         saveLocalState();
         renderPlayerInputs();
-        // Auto-sync to Firebase
         if (db) {
             db.ref('match/players').update({ rahula: matchState.rahulaPlayers, thomas: matchState.thomasPlayers });
         }
@@ -486,62 +466,52 @@ window.removeAwayPlayer = function(index) {
 };
 
 // ==========================================
-// 📋 POPULATE ADMIN INPUTS (UPDATED)
+// 📋 POPULATE ADMIN INPUTS
 // ==========================================
 function populateAdminInputs() {
     document.getElementById("input-home-team").value = matchState.homeTeam;
     document.getElementById("input-away-team").value = matchState.awayTeam;
-    
-    // Render dynamic player inputs
     renderPlayerInputs();
-    
     document.getElementById("input-stream-notice").value = matchState.streamNotice;
     document.getElementById("input-ticker-text").value = matchState.tickerText;
     document.getElementById("input-youtube-url").value = matchState.youtubeUrl || "";
-    
-    // ===== 🆕 Populate Logo URLs =====
     document.getElementById("input-home-logo").value = matchState.homeLogo || "";
     document.getElementById("input-away-logo").value = matchState.awayLogo || "";
 }
 
-// Categories Tab Switcher Logic
 window.switchAdminTab = function(event, tabId) {
     const tabPanels = document.querySelectorAll('.admin-tab-panel');
     tabPanels.forEach(panel => panel.classList.remove('active-tab'));
-
     const tabLinks = document.querySelectorAll('.admin-tab-link');
     tabLinks.forEach(link => link.classList.remove('active'));
-
     document.getElementById(tabId).classList.add('active-tab');
     event.currentTarget.classList.add('active');
-    
-    // Re-render players if switching to that tab
     if (tabId === 'tab-players') {
         renderPlayerInputs();
     }
 }
 
 // ==========================================
-// ⚡ SAVE FUNCTIONS (UPDATED)
+// ⚡ SAVE FUNCTIONS - ALL SYNC TO FIREBASE
 // ==========================================
+
+// ✅ Team Names → Firebase match/meta
 window.saveTeamSettings = function() {
     matchState.homeTeam = document.getElementById("input-home-team").value.toUpperCase() || "HOME";
     matchState.awayTeam = document.getElementById("input-away-team").value.toUpperCase() || "AWAY";
-    
     if (db) {
         db.ref('match/meta').update({ homeTeam: matchState.homeTeam, awayTeam: matchState.awayTeam });
     } else {
         saveLocalState();
         syncDisplayUI();
     }
-    renderPlayerInputs(); // Update titles
+    renderPlayerInputs();
 };
 
-// ===== 🆕 SAVE LOGO SETTINGS (NEW) =====
+// ✅ Logos → Firebase match/meta
 window.saveLogoSettings = function() {
     matchState.homeLogo = document.getElementById("input-home-logo").value.trim();
     matchState.awayLogo = document.getElementById("input-away-logo").value.trim();
-    
     if (db) {
         db.ref('match/meta').update({ homeLogo: matchState.homeLogo, awayLogo: matchState.awayLogo });
     } else {
@@ -549,10 +519,9 @@ window.saveLogoSettings = function() {
         syncDisplayUI();
     }
 };
-// ========================================
 
+// ✅ Players → Firebase match/players
 window.savePlayerSettings = function() {
-    // Read all home players
     const homeInputs = document.querySelectorAll('#home-players-container input');
     matchState.rahulaPlayers = [];
     homeInputs.forEach(input => {
@@ -560,7 +529,6 @@ window.savePlayerSettings = function() {
     });
     if (matchState.rahulaPlayers.length === 0) matchState.rahulaPlayers = ["Default Player"];
 
-    // Read all away players
     const awayInputs = document.querySelectorAll('#away-players-container input');
     matchState.thomasPlayers = [];
     awayInputs.forEach(input => {
@@ -577,9 +545,9 @@ window.savePlayerSettings = function() {
     renderPlayerInputs();
 };
 
+// ✅ Stream Notice → Firebase match/meta
 window.saveStreamSettings = function() {
     matchState.streamNotice = document.getElementById("input-stream-notice").value || "LIVE AREA ACTIVE";
-    
     if (db) {
         db.ref('match/meta').update({ streamNotice: matchState.streamNotice });
     } else {
@@ -588,9 +556,9 @@ window.saveStreamSettings = function() {
     }
 };
 
+// ✅ Ticker Text → Firebase match/meta
 window.saveTickerSettings = function() {
     matchState.tickerText = document.getElementById("input-ticker-text").value || "...";
-    
     if (db) {
         db.ref('match/meta').update({ tickerText: matchState.tickerText });
     } else {
@@ -599,11 +567,41 @@ window.saveTickerSettings = function() {
     }
 };
 
+// ✅ YouTube URL → Firebase match/meta
+window.saveYoutubeStream = function() {
+    const input = document.getElementById("input-youtube-url");
+    const url = input.value.trim();
+    const videoId = extractYouTubeId(url);
+    if (videoId) {
+        matchState.youtubeUrl = videoId;
+        if (db) {
+            db.ref('match/meta').update({ youtubeUrl: videoId });
+        } else {
+            saveLocalState();
+            syncDisplayUI();
+        }
+    } else {
+        alert("Invalid YouTube URL or Video ID. Please check and try again.");
+    }
+};
+
+// ✅ Remove YouTube → Firebase match/meta (set to empty)
+window.closeYoutubeStream = function() {
+    matchState.youtubeUrl = "";
+    document.getElementById("input-youtube-url").value = "";
+    if (db) {
+        db.ref('match/meta').update({ youtubeUrl: "" });
+    } else {
+        saveLocalState();
+        syncDisplayUI();
+    }
+};
+
+// ✅ Password Change (local only)
 window.savePasswordSettings = function() {
     const current = document.getElementById("pass-current").value;
     const newVal = document.getElementById("pass-new").value;
     const msg = document.getElementById("pass-msg");
-    
     if (current === matchState.masterKey) {
         if (newVal.trim().length > 0) {
             matchState.masterKey = newVal;
@@ -661,12 +659,10 @@ function init3DPlayground() {
     scene.add(globeMesh);
 
     footballGroup = new THREE.Group();
-    
     const fbInnerGeo = new THREE.SphereGeometry(4.5, 32, 32);
     const fbInnerMat = new THREE.MeshStandardMaterial({ color: 0x0a0a14, roughness: 0.5 });
     const fbInner = new THREE.Mesh(fbInnerGeo, fbInnerMat);
     footballGroup.add(fbInner);
-
     const fbOuterGeo = new THREE.IcosahedronGeometry(4.56, 1);
     const fbOuterMat = new THREE.MeshStandardMaterial({
         color: 0x00ff66,
@@ -677,7 +673,6 @@ function init3DPlayground() {
     });
     const fbOuter = new THREE.Mesh(fbOuterGeo, fbOuterMat);
     footballGroup.add(fbOuter);
-    
     footballGroup.visible = false;
     scene.add(footballGroup);
 
@@ -758,15 +753,8 @@ function updateTimerUI() {
     
     const liveTimer = document.getElementById("live-timer");
     const deckTimer = document.getElementById("deck-timer");
-    
     if (liveTimer) liveTimer.innerText = timeStr;
     if (deckTimer) deckTimer.innerText = timeStr;
-
-    // Update live page timer if it exists
-    const liveTimerPopup = document.getElementById("live-timer");
-    if (liveTimerPopup) liveTimerPopup.innerText = timeStr;
-
-    // Also update popup timer if it exists
     const popupTimer = document.getElementById("popup-timer");
     if (popupTimer) popupTimer.innerText = timeStr;
 }
@@ -774,7 +762,6 @@ function updateTimerUI() {
 function startClockMechanism() {
     if (matchState.isClockRunning) return;
     matchState.isClockRunning = true;
-    
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
         if (matchState.totalSeconds > 0) {
@@ -813,13 +800,11 @@ document.getElementById("btn-clock-pause")?.addEventListener("click", () => {
 document.getElementById("btn-clock-set")?.addEventListener("click", () => {
     const customInput = document.getElementById("custom-time-input");
     if (!customInput) return;
-    
     const parts = customInput.value.split(":");
     if (parts.length === 2) {
         const m = parseInt(parts[0]) || 0;
         const s = parseInt(parts[1]) || 0;
         matchState.totalSeconds = (m * 60) + s;
-        
         if (db) {
             db.ref('match/timer').update({ totalSeconds: matchState.totalSeconds, isClockRunning: false });
         } else {
@@ -838,12 +823,10 @@ function updateElapsedUI() {
     let mins = Math.floor(matchState.matchElapsedSeconds / 60);
     let secs = matchState.matchElapsedSeconds % 60;
     let timeStr = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
-    
     const mainElapsed = document.getElementById("main-elapsed-timer");
     const deckElapsed = document.getElementById("deck-elapsed");
     const popupElapsed = document.getElementById("popup-elapsed");
     const liveElapsed = document.getElementById("live-elapsed");
-    
     if (mainElapsed) mainElapsed.innerText = timeStr;
     if (deckElapsed) deckElapsed.innerText = timeStr;
     if (popupElapsed) popupElapsed.innerText = `⏱ ${timeStr}`;
@@ -853,7 +836,6 @@ function updateElapsedUI() {
 function startMatchDuration() {
     if (matchState.isMatchRunning) return;
     matchState.isMatchRunning = true;
-    
     clearInterval(matchInterval);
     matchInterval = setInterval(() => {
         matchState.matchElapsedSeconds++;
@@ -925,7 +907,6 @@ document.getElementById("btn-elapsed-reset")?.addEventListener("click", () => {
 // 📊 LIVE SCOREBOARD CORE MATRIX TELEMETRY
 // ==========================================
 
-// 🆕 This function updates the specific elements on the live.html page
 function updateLivePageUI() {
     const liveHomeScore = document.getElementById("live-home-score");
     const liveAwayScore = document.getElementById("live-away-score");
@@ -935,8 +916,6 @@ function updateLivePageUI() {
     const livePosAway = document.getElementById("live-pos-away");
     const livePosBar = document.getElementById("live-pos-bar");
     const liveIframe = document.getElementById("live-youtube-iframe");
-    
-    // 🆕 Live Page Logos
     const liveHomeLogo = document.getElementById("live-home-logo");
     const liveAwayLogo = document.getElementById("live-away-logo");
 
@@ -944,7 +923,6 @@ function updateLivePageUI() {
     if (liveAwayScore) liveAwayScore.innerText = matchState.awayScore;
     if (liveHomeName) liveHomeName.innerText = matchState.homeTeam;
     if (liveAwayName) liveAwayName.innerText = matchState.awayTeam;
-    
     if (livePosHome) livePosHome.innerText = `${matchState.homeTeam} (${matchState.possession}%)`;
     if (livePosAway) livePosAway.innerText = `${matchState.awayTeam} (${100 - matchState.possession}%)`;
     if (livePosBar) livePosBar.style.width = matchState.possession + "%";
@@ -955,7 +933,6 @@ function updateLivePageUI() {
         liveIframe.src = "";
     }
 
-    // Update Live Logos
     if (liveHomeLogo) {
         if (matchState.homeLogo) {
             liveHomeLogo.src = matchState.homeLogo;
@@ -975,7 +952,6 @@ function updateLivePageUI() {
 }
 
 function syncDisplayUI() {
-    // ========== MAIN PAGE UI UPDATES ==========
     const scoreHome = document.getElementById("score-home");
     const scoreAway = document.getElementById("score-away");
     const matrixHome = document.getElementById("matrix-home-score");
@@ -995,8 +971,6 @@ function syncDisplayUI() {
     const posBar = document.getElementById("pos-bar");
     const streamNotice = document.getElementById("display-stream-notice");
     const tickerStrip = document.getElementById("live-ticker-strip");
-
-    // 🆕 Main Page Squad Logos
     const homeLogoImg = document.getElementById("home-logo-img");
     const awayLogoImg = document.getElementById("away-logo-img");
     const homeLogoText = document.getElementById("home-logo-text");
@@ -1026,7 +1000,6 @@ function syncDisplayUI() {
         tickerStrip.innerHTML = loopContent + loopContent;
     }
 
-    // Build Player Squad HTML Lists (Main Page)
     const homeList = document.getElementById("squad-home-list");
     const awayList = document.getElementById("squad-away-list");
     if (homeList) {
@@ -1046,13 +1019,9 @@ function syncDisplayUI() {
         awayList.innerHTML = awayHTML;
     }
 
-    // Main Page YouTube Video
     renderYoutubeVideo();
-
-    // Update Elapsed Timer UI
     updateElapsedUI();
     
-    // ========== UPDATE MAIN PAGE LOGOS ==========
     if (homeLogoImg && homeLogoText) {
         if (matchState.homeLogo) {
             homeLogoImg.src = matchState.homeLogo;
@@ -1074,17 +1043,16 @@ function syncDisplayUI() {
         }
     }
 
-    // ========== UPDATE LIVE PAGE UI (for live.html) ==========
     updateLivePageUI();
 }
 
+// ✅ Scores → Firebase match/
 window.updateScore = function(side, val) {
     if (side === 'home') {
         matchState.homeScore = Math.max(0, matchState.homeScore + val);
     } else {
         matchState.awayScore = Math.max(0, matchState.awayScore + val);
     }
-    
     if (db) {
         db.ref('match/').update({ homeScore: matchState.homeScore, awayScore: matchState.awayScore });
     } else {
@@ -1093,13 +1061,12 @@ window.updateScore = function(side, val) {
     }
 };
 
+// ✅ Possession → Firebase match/
 window.setPossession = function() {
     const posInput = document.getElementById("input-possession");
     if (!posInput) return;
-
     const val = parseInt(posInput.value) || 50;
     matchState.possession = Math.min(100, Math.max(0, val));
-    
     if (db) {
         db.ref('match/').update({ possession: matchState.possession });
     } else {
@@ -1130,7 +1097,6 @@ if (db) {
             matchState.streamNotice = meta.streamNotice || matchState.streamNotice;
             matchState.tickerText = meta.tickerText || matchState.tickerText;
             matchState.youtubeUrl = meta.youtubeUrl || "";
-            // ===== 🆕 Sync Logos =====
             matchState.homeLogo = meta.homeLogo || "";
             matchState.awayLogo = meta.awayLogo || "";
         }
@@ -1186,9 +1152,8 @@ if (db) {
 }
 
 // ==========================================
-// 🆕 YOUTUBE LIVE STREAM CONTROLS
+// 🆕 YOUTUBE ID EXTRACTOR
 // ==========================================
-
 function extractYouTubeId(url) {
     if (!url) return null;
     const patterns = [
@@ -1205,36 +1170,6 @@ function extractYouTubeId(url) {
     return null;
 }
 
-window.saveYoutubeStream = function() {
-    const input = document.getElementById("input-youtube-url");
-    const url = input.value.trim();
-    const videoId = extractYouTubeId(url);
-    
-    if (videoId) {
-        matchState.youtubeUrl = videoId;
-        if (db) {
-            db.ref('match/meta').update({ youtubeUrl: videoId });
-        } else {
-            saveLocalState();
-            syncDisplayUI();
-        }
-    } else {
-        alert("Invalid YouTube URL or Video ID. Please check and try again.");
-    }
-};
-
-// 🆕 CLOSE YOUTUBE - REMOVES FROM DATABASE (already existed, no changes needed)
-window.closeYoutubeStream = function() {
-    matchState.youtubeUrl = "";
-    document.getElementById("input-youtube-url").value = "";
-    if (db) {
-        db.ref('match/meta').update({ youtubeUrl: "" });
-    } else {
-        saveLocalState();
-        syncDisplayUI();
-    }
-};
-
 function renderYoutubeVideo() {
     const container = document.getElementById("youtube-stream-container");
     const iframe = document.getElementById("youtube-iframe");
@@ -1250,7 +1185,7 @@ function renderYoutubeVideo() {
 }
 
 // ==========================================
-// 🚀 RESET / CLEAR ALL MATCH DATA (NEW)
+// 🚀 RESET / CLEAR ALL MATCH DATA
 // ==========================================
 window.resetAllMatchData = function() {
     if (!db) { 
@@ -1258,18 +1193,11 @@ window.resetAllMatchData = function() {
         return; 
     }
 
-    // Confirmation dialog to prevent accidental reset
     if (!confirm("⚠️ WARNING: This will reset ALL match data (scores, timers, players, logos) to default values. Continue?")) {
         return;
     }
 
-    // Default values
-    const defaultData = {
-        homeScore: 0,
-        awayScore: 0,
-        possession: 50
-    };
-
+    const defaultData = { homeScore: 0, awayScore: 0, possession: 50 };
     const defaultMeta = {
         homeTeam: "RAHULA",
         awayTeam: "ST. THOMAS'",
@@ -1279,30 +1207,19 @@ window.resetAllMatchData = function() {
         tickerText: "WELCOME TO THE GOLDEN-BLUE ENCOUNTER 2026 Live Broadcast...",
         youtubeUrl: ""
     };
-
     const defaultPlayers = {
         rahula: ["Player One (GK)", "Player Two (C)", "Player Three", "Player Four"],
         thomas: ["Player Alpha (GK)", "Player Beta (C)", "Player Gamma", "Player Delta"]
     };
+    const defaultTimer = { totalSeconds: 1200, isClockRunning: false };
+    const defaultElapsed = { matchElapsedSeconds: 0, isMatchRunning: false };
 
-    const defaultTimer = {
-        totalSeconds: 1200,
-        isClockRunning: false
-    };
-
-    const defaultElapsed = {
-        matchElapsedSeconds: 0,
-        isMatchRunning: false
-    };
-
-    // Push defaults to Firebase
     db.ref('match/').update(defaultData);
     db.ref('match/meta').update(defaultMeta);
     db.ref('match/players').update(defaultPlayers);
     db.ref('match/timer').update(defaultTimer);
     db.ref('match/elapsed').update(defaultElapsed);
 
-    // Also reset local matchState to reflect changes immediately
     matchState.homeScore = 0;
     matchState.awayScore = 0;
     matchState.possession = 50;
@@ -1320,7 +1237,6 @@ window.resetAllMatchData = function() {
     matchState.matchElapsedSeconds = 0;
     matchState.isMatchRunning = false;
 
-    // Stop any running intervals
     clearInterval(timerInterval);
     clearInterval(matchInterval);
 
@@ -1329,7 +1245,6 @@ window.resetAllMatchData = function() {
     updateTimerUI();
     updateElapsedUI();
 
-    // Close any open admin panels
     if (adminModalOverlay) {
         closeModal();
     }

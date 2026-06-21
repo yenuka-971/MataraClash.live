@@ -6,10 +6,10 @@
     <title>Matara Clash | Live Scoring Arena</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -41,7 +41,6 @@
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
                     
-                    <!-- MATCH DURATION DISPLAY -->
                     <div class="match-elapsed-display">
                         MATCH DURATION: <span id="main-elapsed-timer" class="neon-text-gold">00:00</span>
                     </div>
@@ -49,7 +48,6 @@
                     <h2><span id="title-home-team">Rahula</span> vs <span id="title-away-team">St. Thomas'</span> <br><span class="sub-glow">Live Scoring Arena</span></h2>
                     <p class="hero-desc">Next-generation sports broadcasting infrastructure powered by Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
                     
-                    <!-- LIVE MATCH BUTTON - OPENS live.html -->
                     <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> LIVE MATCH</button>
 
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
@@ -77,7 +75,6 @@
                     </div>
                 </div>
 
-                <!-- YouTube Live Stream Feed (Main Page) -->
                 <div class="stream-feed-wrapper" id="youtube-stream-container" style="grid-column: 1 / -1; display: none;">
                     <div class="video-aspect-box">
                         <iframe id="youtube-iframe" src="" frameborder="0" allowfullscreen></iframe>
@@ -110,7 +107,6 @@
                 <div class="cyber-line"></div>
             </div>
             <div class="lineups-grid">
-                <!-- ===== HOME SQUAD CARD WITH LOGO ===== -->
                 <div class="squad-card team-rahula">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder">
@@ -119,11 +115,9 @@
                         </div>
                         <h4 id="squad-home-title">RAHULA COLLEGE</h4>
                     </div>
-                    <ul id="squad-home-list" class="player-list">
-                        </ul>
+                    <ul id="squad-home-list" class="player-list"></ul>
                 </div>
 
-                <!-- ===== AWAY SQUAD CARD WITH LOGO ===== -->
                 <div class="squad-card team-thomas">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder">
@@ -132,15 +126,13 @@
                         </div>
                         <h4 id="squad-away-title">ST. THOMAS' COLLEGE</h4>
                     </div>
-                    <ul id="squad-away-list" class="player-list">
-                        </ul>
+                    <ul id="squad-away-list" class="player-list"></ul>
                 </div>
             </div>
         </section>
 
         <div class="ticker-wrap">
-            <div class="ticker-move" id="live-ticker-strip">
-                </div>
+            <div class="ticker-move" id="live-ticker-strip"></div>
         </div>
 
     </div>
@@ -182,7 +174,6 @@
                             MATRIX SCOREBOARD OVERVIEW: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
                         </div>
                         
-                        <!-- ===== 🆕 TEAM LOGOS SECTION (NEW) ===== -->
                         <div class="control-block-group" style="margin-top: 20px;">
                             <h4 class="group-title"><i class="fa-solid fa-image"></i> TEAM LOGOS</h4>
                             <label class="input-label">Home Team Logo URL</label>
@@ -191,9 +182,7 @@
                             <input type="text" id="input-away-logo" placeholder="https://example.com/away-logo.png">
                             <button onclick="saveLogoSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE LOGOS</button>
                         </div>
-                        <!-- ========================================= -->
 
-                        <!-- ===== 🆕 DATABASE RESET / CLEAR ALL DATA ===== -->
                         <div class="control-block-group" style="margin-top: 20px;">
                             <h4 class="group-title"><i class="fa-solid fa-database"></i> DATABASE RESET (CLEAR ALL)</h4>
                             <p style="color:#94a3b8; font-size:0.9rem;">Reset everything (scores, timers, players, logos) to default values and push to Firebase.</p>
@@ -235,7 +224,6 @@
                     <div id="tab-stream-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Stream Settings</h2>
                         
-                        <!-- SYSTEM NOTICES -->
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-signal"></i> SYSTEM NOTICES</h4>
                             <label class="input-label">Header Status Badge Text</label>
@@ -243,7 +231,6 @@
                             <button onclick="saveStreamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE STATUS BADGE</button>
                         </div>
 
-                        <!-- YOUTUBE LIVE EMBED -->
                         <div class="control-block-group" style="margin-top: 15px;">
                             <h4 class="group-title"><i class="fa-brands fa-youtube"></i> YOUTUBE LIVE EMBED</h4>
                             <label class="input-label">YouTube Live URL or Video ID</label>
@@ -282,7 +269,6 @@
                             </div>
                         </div>
 
-                        <!-- MATCH DURATION (ELAPSED) CONTROLS -->
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-clock"></i> MATCH DURATION (ELAPSED)</h4>
                             <div class="matrix-score-display-small">ELAPSED: <span id="deck-elapsed" class="neon-text-green">00:00</span></div>

@@ -6,16 +6,15 @@
     <title>Matara Clash | LIVE MATCH</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body class="live-match-body">
     <div class="live-match-container">
         <div class="match-title-live">⚡ THE GOLDEN-BLUE ENCOUNTER 2026 ⚡</div>
         
-        <!-- Scoreboard -->
         <div class="live-scoreboard-board">
             <div class="team-block-popup home">
                 <div style="display: flex; align-items: center; gap: 15px;">
@@ -38,12 +37,10 @@
             </div>
         </div>
 
-        <!-- YouTube Video -->
         <div class="live-video-wrapper">
             <iframe id="live-youtube-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
         </div>
 
-        <!-- Possession Stats -->
         <div class="live-stats-bar">
             <span class="possession-text" id="live-pos-home">RAHULA (50%)</span>
             <div class="pos-bar-bg"><div class="pos-bar-fill" id="live-pos-bar" style="width:50%"></div></div>
@@ -52,69 +49,5 @@
     </div>
 
     <script src="script.js"></script>
-    <script>
-        // Ensure the video loads if URL already exists when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // The main script.js sync will handle updates, but we call it once to be safe.
-            if (typeof matchState !== 'undefined' && matchState.youtubeUrl) {
-                const iframe = document.getElementById('live-youtube-iframe');
-                if (iframe) {
-                    iframe.src = `https://www.youtube.com/embed/${matchState.youtubeUrl}?autoplay=1&mute=0&controls=1&rel=0`;
-                }
-            }
-            // Sync scores, names, and logos immediately
-            if (typeof matchState !== 'undefined') {
-                const homeScore = document.getElementById('live-home-score');
-                const awayScore = document.getElementById('live-away-score');
-                const homeName = document.getElementById('live-home-name');
-                const awayName = document.getElementById('live-away-name');
-                const timer = document.getElementById('live-timer');
-                const elapsed = document.getElementById('live-elapsed');
-                const posBar = document.getElementById('live-pos-bar');
-                const posHome = document.getElementById('live-pos-home');
-                const posAway = document.getElementById('live-pos-away');
-                
-                // Logos
-                const homeLogoImg = document.getElementById('live-home-logo');
-                const awayLogoImg = document.getElementById('live-away-logo');
-
-                if (homeScore) homeScore.innerText = matchState.homeScore;
-                if (awayScore) awayScore.innerText = matchState.awayScore;
-                if (homeName) homeName.innerText = matchState.homeTeam;
-                if (awayName) awayName.innerText = matchState.awayTeam;
-                if (timer) {
-                    let mins = Math.floor(matchState.totalSeconds / 60);
-                    let secs = matchState.totalSeconds % 60;
-                    timer.innerText = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-                }
-                if (elapsed) {
-                    let mins = Math.floor(matchState.matchElapsedSeconds / 60);
-                    let secs = matchState.matchElapsedSeconds % 60;
-                    elapsed.innerText = '⏱ ' + (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-                }
-                if (posBar) posBar.style.width = matchState.possession + '%';
-                if (posHome) posHome.innerText = matchState.homeTeam + ' (' + matchState.possession + '%)';
-                if (posAway) posAway.innerText = matchState.awayTeam + ' (' + (100 - matchState.possession) + '%)';
-
-                // Set Logos
-                if (homeLogoImg) {
-                    if (matchState.homeLogo) {
-                        homeLogoImg.src = matchState.homeLogo;
-                        homeLogoImg.style.display = 'block';
-                    } else {
-                        homeLogoImg.style.display = 'none';
-                    }
-                }
-                if (awayLogoImg) {
-                    if (matchState.awayLogo) {
-                        awayLogoImg.src = matchState.awayLogo;
-                        awayLogoImg.style.display = 'block';
-                    } else {
-                        awayLogoImg.style.display = 'none';
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 </html>

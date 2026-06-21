@@ -192,7 +192,6 @@ body {
     letter-spacing: 2px;
 }
 
-/* MATCH ELAPSED DISPLAY */
 .match-elapsed-display {
     font-family: var(--font-matrix);
     font-size: 1rem;
@@ -358,7 +357,6 @@ body {
     margin-top: 2px;
 }
 
-/* 📺 OBS STREAM INTERFACE MODE */
 body.obs-stream-active {
     background: transparent !important;
     background-image: none !important;
@@ -508,7 +506,7 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 /* ==========================================================================
-   📻 NEWS TICKER SYSTEM SCROLL BAR (SEAMLESS INFINITE LOOP UPDATE)
+   📻 NEWS TICKER SYSTEM SCROLL BAR
    ========================================================================== */
 .ticker-wrap {
     width: 100%;
@@ -547,7 +545,7 @@ body.obs-stream-active .live-scoreboard-board {
 }
 
 /* ==========================================================================
-   🛡️ CYBERPUNK ADMIN MODAL OVERLAY (BLURRED BACKGROUND)
+   🛡️ CYBERPUNK ADMIN MODAL OVERLAY
    ========================================================================== */
 .admin-modal-overlay {
     position: fixed;
@@ -606,7 +604,6 @@ body.obs-stream-active .live-scoreboard-board {
     margin: 0;
 }
 
-/* AUTH CENTERED SCREEN */
 .modal-centered-auth {
     display: flex;
     flex-direction: column;
@@ -626,7 +623,6 @@ body.obs-stream-active .live-scoreboard-board {
     margin-bottom: 20px;
 }
 
-/* ADMIN DASHBOARD LAYOUT & TABS */
 .admin-dashboard-layout {
     display: flex;
     height: 100%;
@@ -697,7 +693,6 @@ body.obs-stream-active .live-scoreboard-board {
     margin-bottom: 20px;
 }
 
-/* ADMIN INNER CONTROLS */
 .control-block-group {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255,255,255,0.05);
@@ -760,7 +755,6 @@ body.obs-stream-active .live-scoreboard-board {
     font-size: 1.1rem;
 }
 
-/* COMMON GLOWING INPUTS */
 .cyber-btn {
     font-family: var(--font-matrix);
     font-weight: bold;
@@ -824,9 +818,6 @@ input:focus { outline: none; border-color: var(--neon-gold); }
 .input-label { font-size: 0.9rem; color: #94a3b8; margin-bottom:5px; display:block; }
 .error-text { color: var(--neon-red); font-size: 0.8rem; font-family: var(--font-matrix); }
 
-/* ==========================================================================
-   YOUTUBE LIVE STREAM CONTAINER & ASPECT RATIO
-   ========================================================================== */
 .stream-feed-wrapper {
     width: 100%;
     max-width: 100%;
@@ -842,7 +833,7 @@ input:focus { outline: none; border-color: var(--neon-gold); }
 .video-aspect-box {
     position: relative;
     width: 100%;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    padding-bottom: 56.25%;
     height: 0;
     overflow: hidden;
     border-radius: 8px;
@@ -942,7 +933,7 @@ body.live-match-body {
 .live-video-wrapper {
     width: 100%;
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
+    padding-bottom: 56.25%;
     height: 0;
     background: #000;
     border-radius: 16px;
@@ -994,7 +985,6 @@ body.live-match-body {
     text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
 }
 
-/* ===== 🆕 Live Page Logos ===== */
 .live-team-logo {
     width: 50px !important;
     height: 50px !important;
@@ -1017,9 +1007,6 @@ body.live-match-body {
     .live-team-logo { width: 30px !important; height: 30px !important; }
 }
 
-/* ==========================================================================
-   📱 ULTRA RESPONSIVE LAYOUT ADAPTERS
-   ========================================================================== */
 @media (max-width: 968px) {
     .hero-layout { grid-template-columns: 1fr; gap: 30px; }
     #canvas-3d-container { height: 300px; }

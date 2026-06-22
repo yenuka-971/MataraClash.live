@@ -131,6 +131,7 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .status-badge {
@@ -995,51 +996,6 @@ body.live-match-body {
     border: 1px solid rgba(255,255,255,0.05);
 }
 
-@media (max-width: 768px) {
-    .live-scoreboard-board { grid-template-columns: 1fr; }
-    .team-block-popup { padding: 15px 20px; flex-direction: row; }
-    .score-digit-popup { font-size: 3rem; }
-    .clock-popup { font-size: 2.2rem; }
-    .team-name-popup { font-size: 1.4rem; }
-    .pos-bar-bg { width: 30%; }
-    .possession-text { font-size: 0.8rem; }
-    .live-match-container { gap: 15px; }
-    .live-team-logo { width: 30px !important; height: 30px !important; }
-}
-
-@media (max-width: 968px) {
-    .hero-layout { grid-template-columns: 1fr; gap: 30px; }
-    #canvas-3d-container { height: 300px; }
-}
-
-@media (max-width: 768px) {
-    .admin-dashboard-layout { flex-direction: column; }
-    .admin-modal-sidebar {
-        width: 100%;
-        flex-direction: row;
-        overflow-x: auto;
-        padding: 5px;
-        border-right: none;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .admin-tab-link {
-        white-space: nowrap;
-        padding: 10px 15px;
-    }
-    .admin-modal-window { width: 95%; height: 90vh; }
-    
-    .live-scoreboard-board { grid-template-columns: 1fr; }
-    .team-block.home, .team-block.away {
-        border: none;
-        flex-direction: column;
-        gap: 5px;
-        padding: 15px;
-    }
-    .timer-block {
-        border-top: 1px solid rgba(255,255,255,0.05);
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-}
 /* ==========================================================================
    🌀 HOLOGRAPHIC BALL LOGO STYLES
    ========================================================================== */
@@ -1060,4 +1016,666 @@ body.live-match-body {
 @keyframes rotateLogoHUD {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   🏆 MATCH HISTORY MODAL & CARDS
+   ========================================================================== */
+.history-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(7, 7, 13, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 4000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.history-modal-overlay.open {
+    display: flex;
+    opacity: 1;
+}
+.history-modal-window {
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
+    background: var(--bg-dark);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255, 215, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.95) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.history-modal-overlay.open .history-modal-window {
+    transform: scale(1) translateY(0);
+}
+.history-modal-body {
+    padding: 25px;
+    overflow-y: auto;
+    flex: 1;
+}
+.history-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+.history-card {
+    background: rgba(15, 15, 30, 0.7);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 12px;
+    padding: 18px 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.history-card:hover {
+    border-color: var(--neon-gold);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
+}
+.history-card-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #94a3b8;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+.history-competition {
+    color: var(--neon-blue);
+    font-family: var(--font-matrix);
+    letter-spacing: 1px;
+}
+.history-date {
+    font-family: var(--font-prose);
+}
+.history-card-teams {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-matrix);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 10px 0;
+}
+.history-team.home {
+    color: var(--neon-gold);
+}
+.history-team.away {
+    color: var(--neon-blue);
+}
+.history-score {
+    background: rgba(255,255,255,0.05);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 1.4rem;
+    color: #fff;
+}
+.history-card-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 8px;
+}
+.history-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    gap: 10px;
+}
+.history-empty-state i {
+    font-size: 3rem;
+    color: var(--neon-gold);
+    opacity: 0.4;
+}
+#history-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+#history-admin-list > div {
+    background: rgba(255,255,255,0.02);
+    padding: 6px 12px;
+    border-radius: 4px;
+    border-left: 3px solid var(--neon-gold);
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   📱 MOBILE RESPONSIVENESS (NEW & IMPROVED)
+   ========================================================================== */
+
+/* --- Tablets & small laptops (max-width: 1024px) --- */
+@media (max-width: 1024px) {
+    .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    #canvas-3d-container {
+        height: 320px;
+    }
+    .hero-layout h2 {
+        font-size: 2rem;
+    }
+}
+
+/* --- Large phones & small tablets (max-width: 768px) --- */
+@media (max-width: 768px) {
+    .app-container {
+        padding: 12px;
+        gap: 20px;
+    }
+    .main-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+    .logo-zone {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .logo-zone h1 {
+        font-size: 1.1rem;
+    }
+    .cyber-ball-logo {
+        width: 30px;
+        height: 30px;
+    }
+    .header-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    .header-controls .cyber-btn {
+        font-size: 0.7rem;
+        padding: 5px 10px;
+    }
+    .status-badge {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+    }
+    .hero-matrix-section {
+        padding: 16px;
+    }
+    .hero-layout h2 {
+        font-size: 1.5rem;
+    }
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    .live-scoreboard-board {
+        grid-template-columns: 1fr;
+        border-radius: 8px;
+    }
+    .team-block {
+        padding: 14px 16px;
+        justify-content: center;
+        gap: 20px;
+    }
+    .team-block.home {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .team-block.away {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .team-name {
+        font-size: 1.1rem;
+    }
+    .score-digit {
+        font-size: 2.2rem;
+    }
+    .timer-block {
+        padding: 8px 12px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .matrix-clock {
+        font-size: 1.4rem;
+    }
+    .live-indicator {
+        font-size: 0.55rem;
+    }
+    #canvas-3d-container {
+        height: 240px;
+        border-radius: 12px;
+    }
+    .graphics-hud {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .hud-tag {
+        font-size: 0.6rem;
+        padding: 3px 8px;
+    }
+    .hud-action-btn {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+    }
+    .possession-header {
+        font-size: 0.75rem;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
+        text-align: center;
+    }
+    .possession-header span {
+        white-space: nowrap;
+    }
+    .lineups-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .squad-header h4 {
+        font-size: 0.95rem;
+    }
+    .player-list li {
+        font-size: 0.9rem;
+    }
+    .admin-modal-window {
+        width: 98%;
+        height: 92vh;
+        border-radius: 8px;
+    }
+    .admin-modal-sidebar {
+        width: 100%;
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 6px 10px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .admin-tab-link {
+        white-space: nowrap;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    .admin-tab-link.active {
+        border-left-color: transparent;
+        border-bottom-color: var(--neon-gold);
+    }
+    .admin-modal-content {
+        padding: 16px;
+        padding-bottom: 60px;
+    }
+    .panel-heading {
+        font-size: 1.2rem;
+    }
+    .control-block-group {
+        padding: 14px;
+        gap: 12px;
+    }
+    .admin-grid-2x2,
+    .admin-grid-2x1 {
+        grid-template-columns: 1fr 1fr;
+    }
+    .admin-grid-2x2 button,
+    .admin-grid-2x1 button {
+        font-size: 0.7rem;
+        padding: 10px;
+    }
+    .history-modal-window {
+        width: 95%;
+        max-height: 90vh;
+    }
+    .history-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .history-card-teams {
+        font-size: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+    .history-score {
+        font-size: 1.1rem;
+        padding: 2px 10px;
+    }
+    .history-card-footer {
+        font-size: 0.8rem;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: center;
+    }
+    .match-elapsed-display {
+        font-size: 0.85rem;
+        padding: 4px 12px;
+    }
+    .match-elapsed-display span {
+        font-size: 1rem;
+    }
+    .live-scoreboard-board .team-block-popup {
+        padding: 14px 18px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .team-name-popup {
+        font-size: 1.4rem;
+    }
+    .score-digit-popup {
+        font-size: 2.8rem;
+    }
+    .timer-block-popup .clock-popup {
+        font-size: 2rem;
+    }
+    .timer-block-popup .elapsed-popup {
+        font-size: 0.9rem;
+    }
+    .live-stats-bar {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 12px 16px;
+    }
+    .pos-bar-bg {
+        width: 60%;
+    }
+    .possession-text {
+        font-size: 0.8rem;
+    }
+    .ticker-wrap {
+        padding: 8px 0;
+    }
+    .ticker-move {
+        font-size: 0.7rem;
+        animation-duration: 18s;
+    }
+    .ticker-item {
+        padding-right: 80px;
+    }
+    .input-inline-group {
+        flex-wrap: wrap;
+    }
+    .input-inline-group input,
+    .input-inline-group button {
+        flex: 1 1 100%;
+    }
+    .cyber-btn {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+    }
+    .btn-primary {
+        padding: 10px 18px;
+    }
+    .btn-small {
+        padding: 5px 12px;
+        font-size: 0.7rem;
+    }
+    .icon-btn {
+        width: 34px;
+        height: 34px;
+    }
+}
+
+/* --- Extra small phones (max-width: 480px) --- */
+@media (max-width: 480px) {
+    .app-container {
+        padding: 8px;
+        gap: 16px;
+    }
+    .main-header {
+        padding: 10px 12px;
+    }
+    .logo-zone h1 {
+        font-size: 0.95rem;
+    }
+    .cyber-ball-logo {
+        width: 24px;
+        height: 24px;
+    }
+    .header-controls .cyber-btn {
+        font-size: 0.6rem;
+        padding: 4px 8px;
+    }
+    .status-badge {
+        font-size: 0.55rem;
+        padding: 3px 8px;
+        gap: 4px;
+    }
+    .pulse-dot {
+        width: 6px;
+        height: 6px;
+    }
+    .hero-matrix-section {
+        padding: 12px;
+    }
+    .hero-layout h2 {
+        font-size: 1.2rem;
+    }
+    .hero-desc {
+        font-size: 0.85rem;
+    }
+    .cyber-tag {
+        font-size: 0.7rem;
+    }
+    .match-elapsed-display {
+        font-size: 0.75rem;
+        padding: 3px 10px;
+    }
+    .match-elapsed-display span {
+        font-size: 0.9rem;
+    }
+    .live-scoreboard-board .team-block {
+        padding: 10px 12px;
+        gap: 12px;
+    }
+    .team-name {
+        font-size: 0.95rem;
+    }
+    .score-digit {
+        font-size: 1.8rem;
+    }
+    .timer-block {
+        padding: 6px 10px;
+    }
+    .matrix-clock {
+        font-size: 1.2rem;
+    }
+    #canvas-3d-container {
+        height: 180px;
+    }
+    .graphics-hud {
+        bottom: 6px;
+        left: 6px;
+        right: 6px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .hud-tag {
+        font-size: 0.5rem;
+        padding: 2px 6px;
+    }
+    .hud-action-btn {
+        font-size: 0.55rem;
+        padding: 3px 8px;
+    }
+    .possession-header {
+        font-size: 0.65rem;
+    }
+    .possession-bar-container {
+        height: 8px;
+    }
+    .squad-card {
+        padding: 14px;
+    }
+    .squad-header {
+        gap: 10px;
+    }
+    .squad-logo-placeholder {
+        width: 44px;
+        height: 44px;
+    }
+    .squad-header h4 {
+        font-size: 0.85rem;
+    }
+    .player-list li {
+        font-size: 0.8rem;
+    }
+    .jersey-num {
+        font-size: 0.7rem;
+        padding: 1px 5px;
+    }
+    .admin-modal-window {
+        height: 96vh;
+        border-radius: 6px;
+    }
+    .modal-top-bar {
+        padding: 12px 16px;
+    }
+    .modal-top-bar h3 {
+        font-size: 1rem;
+    }
+    .admin-modal-content {
+        padding: 12px;
+        padding-bottom: 50px;
+    }
+    .panel-heading {
+        font-size: 1rem;
+    }
+    .control-block-group {
+        padding: 10px;
+        gap: 10px;
+    }
+    .group-title {
+        font-size: 0.8rem;
+    }
+    .admin-grid-2x2,
+    .admin-grid-2x1 {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+    }
+    .control-action-btn {
+        font-size: 0.65rem;
+        padding: 8px 4px;
+    }
+    .matrix-score-display-small {
+        font-size: 0.9rem;
+        padding: 6px;
+    }
+    .matrix-score-sync-status {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+    .history-modal-body {
+        padding: 14px;
+    }
+    .history-card {
+        padding: 12px 14px;
+    }
+    .history-card-header {
+        font-size: 0.7rem;
+    }
+    .history-card-teams {
+        font-size: 0.85rem;
+    }
+    .history-score {
+        font-size: 0.95rem;
+        padding: 2px 8px;
+    }
+    .history-card-footer {
+        font-size: 0.7rem;
+    }
+    .history-empty-state i {
+        font-size: 2rem;
+    }
+    .history-empty-state p {
+        font-size: 0.9rem;
+    }
+    .live-match-container {
+        gap: 14px;
+    }
+    .live-scoreboard-board .team-block-popup {
+        padding: 10px 12px;
+        gap: 6px;
+    }
+    .team-name-popup {
+        font-size: 1.1rem;
+    }
+    .score-digit-popup {
+        font-size: 2.2rem;
+    }
+    .timer-block-popup .clock-popup {
+        font-size: 1.6rem;
+    }
+    .timer-block-popup .elapsed-popup {
+        font-size: 0.7rem;
+    }
+    .live-tag-popup {
+        font-size: 0.6rem;
+    }
+    .live-stats-bar {
+        padding: 10px 12px;
+        gap: 6px;
+    }
+    .pos-bar-bg {
+        width: 50%;
+        height: 8px;
+    }
+    .possession-text {
+        font-size: 0.7rem;
+    }
+    .match-title-live {
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+    }
+    .ticker-wrap {
+        padding: 6px 0;
+    }
+    .ticker-move {
+        font-size: 0.6rem;
+        animation-duration: 14s;
+    }
+    .ticker-item {
+        padding-right: 60px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+    }
+    .cyber-btn {
+        font-size: 0.7rem;
+        padding: 6px 12px;
+    }
+    .btn-primary {
+        padding: 8px 14px;
+    }
+    .btn-small {
+        padding: 4px 10px;
+        font-size: 0.6rem;
+    }
+    .icon-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    .history-modal-window {
+        width: 98%;
+    }
 }

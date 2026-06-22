@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
     <title>Matara Clash | Live Scoring Arena</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-    <link rel="icon" type="image/svg+xml" href="logo.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js">
+    </script>
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
 </head>
 <body>
 
@@ -23,59 +26,54 @@
     </div>
 
     <div class="app-container">
-        
+
         <header class="main-header">
             <div class="logo-zone">
                 <svg class="cyber-ball-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-    <defs>
-        <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="5" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        <linearGradient id="clash-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="45%" stop-color="#ffd700" />
-            <stop offset="55%" stop-color="#00f0ff" />
-        </linearGradient>
-    </defs>
-
-    <circle cx="100" cy="100" r="90" fill="none" stroke="url(#clash-grad)" stroke-width="2" stroke-dasharray="15 8 4 8" opacity="0.8"/>
-    <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-
-    <g filter="url(#glow-gold)" stroke="#ffd700" stroke-width="2.5" fill="none">
-        <path d="M 100 20 L 55 55 L 55 145 L 100 180" />
-        <path d="M 55 55 L 85 90 L 85 125 L 55 145" />
-        <path d="M 100 20 L 85 90" />
-        <path d="M 100 180 L 85 125" />
-        <path d="M 25 100 L 55 55" />
-        <path d="M 25 100 L 55 145" />
-        <path d="M 25 100 L 75 100" opacity="0.6"/>
-    </g>
-
-    <g filter="url(#glow-cyan)" stroke="#00f0ff" stroke-width="2.5" fill="none">
-        <path d="M 100 20 L 145 55 L 145 145 L 100 180" />
-        <path d="M 145 55 L 115 90 L 115 125 L 145 145" />
-        <path d="M 100 20 L 115 90" />
-        <path d="M 100 180 L 115 125" />
-        <path d="M 175 100 L 145 55" />
-        <path d="M 175 100 L 145 145" />
-        <path d="M 175 100 L 125 100" opacity="0.6"/>
-    </g>
-
-    <path d="M 100 10 L 100 190" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.9" />
-
-    <path d="M 20 30 L 20 20 L 30 20" fill="none" stroke="#ffd700" stroke-width="2"/>
-    <path d="M 180 170 L 180 180 L 170 180" fill="none" stroke="#00f0ff" stroke-width="2"/>
-    
-    <text x="32" y="103" fill="#ffd700" font-family="monospace" font-size="12" font-weight="bold" opacity="0.8">R</text>
-    <text x="160" y="103" fill="#00f0ff" font-family="monospace" font-size="12" font-weight="bold" opacity="0.8">T</text>
-</svg>
+                    <defs>
+                        <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="5" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                        <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="5" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                        <linearGradient id="clash-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="45%" stop-color="#ffd700" />
+                            <stop offset="55%" stop-color="#00f0ff" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="url(#clash-grad)" stroke-width="2" stroke-dasharray="15 8 4 8" opacity="0.8" />
+                    <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+                    <g filter="url(#glow-gold)" stroke="#ffd700" stroke-width="2.5" fill="none">
+                        <path d="M 100 20 L 55 55 L 55 145 L 100 180" />
+                        <path d="M 55 55 L 85 90 L 85 125 L 55 145" />
+                        <path d="M 100 20 L 85 90" />
+                        <path d="M 100 180 L 85 125" />
+                        <path d="M 25 100 L 55 55" />
+                        <path d="M 25 100 L 55 145" />
+                        <path d="M 25 100 L 75 100" opacity="0.6" />
+                    </g>
+                    <g filter="url(#glow-cyan)" stroke="#00f0ff" stroke-width="2.5" fill="none">
+                        <path d="M 100 20 L 145 55 L 145 145 L 100 180" />
+                        <path d="M 145 55 L 115 90 L 115 125 L 145 145" />
+                        <path d="M 100 20 L 115 90" />
+                        <path d="M 100 180 L 115 125" />
+                        <path d="M 175 100 L 145 55" />
+                        <path d="M 175 100 L 145 145" />
+                        <path d="M 175 100 L 125 100" opacity="0.6" />
+                    </g>
+                    <path d="M 100 10 L 100 190" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.9" />
+                    <path d="M 20 30 L 20 20 L 30 20" fill="none" stroke="#ffd700" stroke-width="2" />
+                    <path d="M 180 170 L 180 180 L 170 180" fill="none" stroke="#00f0ff" stroke-width="2" />
+                    <text x="32" y="103" fill="#ffd700" font-family="monospace" font-size="12" font-weight="bold" opacity="0.8">R</text>
+                    <text x="160" y="103" fill="#00f0ff" font-family="monospace" font-size="12" font-weight="bold" opacity="0.8">T</text>
+                </svg>
                 <h1>MATARA CLASH <span class="neon-text-green">LIVE</span></h1>
             </div>
             <div class="header-controls">
+                <button id="history-btn" class="cyber-btn btn-small"><i class="fa-solid fa-clock-rotate-left"></i> MATCH HISTORY</button>
                 <button id="hero-launch-btn" class="cyber-btn btn-small"><i class="fa-solid fa-sliders"></i> CONTROL DECK</button>
                 <div class="status-badge"><span class="pulse-dot"></span><span id="display-stream-notice">BIG MATCH DECK ACTIVE</span></div>
                 <button id="admin-menu-btn" class="icon-btn"><i class="fa-solid fa-shield-halved"></i></button>
@@ -84,17 +82,17 @@
 
         <section class="hero-matrix-section">
             <div class="hero-layout">
-                
+
                 <div class="scoreboard-wrapper">
                     <span class="cyber-tag">THE GOLDEN-BLUE ENCOUNTER 2026</span>
-                    
+
                     <div class="match-elapsed-display">
                         MATCH DURATION: <span id="main-elapsed-timer" class="neon-text-gold">00:00</span>
                     </div>
 
-                    <h2><span id="title-home-team">Rahula</span> vs <span id="title-away-team">St. Thomas'</span> <br><span class="sub-glow">Live Scoring Arena</span></h2>
+                    <h2><span id="title-home-team">Rahula</span> vs <span id="title-away-team">St. Thomas'</span> <br /><span class="sub-glow">Live Scoring Arena</span></h2>
                     <p class="hero-desc">Next-generation sports broadcasting infrastructure powered by Rahula Web Team. Tailored live feeds, immersive 3D graphics, and real-time match analytics.</p>
-                    
+
                     <button id="obs-mode-btn" class="cyber-btn btn-primary"><i class="fa-solid fa-video"></i> LIVE MATCH</button>
 
                     <div id="obs-scoreboard-strip" class="live-scoreboard-board">
@@ -157,7 +155,7 @@
                 <div class="squad-card team-rahula">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder">
-                            <img id="home-logo-img" class="team-logo-img" src="" alt="Home Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('home-logo-text').style.display='flex';">
+                            <img id="home-logo-img" class="team-logo-img" src="" alt="Home Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('home-logo-text').style.display='flex';" />
                             <span id="home-logo-text" class="logo-text">HOME</span>
                         </div>
                         <h4 id="squad-home-title">RAHULA COLLEGE</h4>
@@ -168,7 +166,7 @@
                 <div class="squad-card team-thomas">
                     <div class="squad-header">
                         <div class="squad-logo-placeholder">
-                            <img id="away-logo-img" class="team-logo-img" src="" alt="Away Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('away-logo-text').style.display='flex';">
+                            <img id="away-logo-img" class="team-logo-img" src="" alt="Away Logo" style="display: none;" onerror="this.style.display='none'; document.getElementById('away-logo-text').style.display='flex';" />
                             <span id="away-logo-text" class="logo-text">AWAY</span>
                         </div>
                         <h4 id="squad-away-title">ST. THOMAS' COLLEGE</h4>
@@ -184,9 +182,29 @@
 
     </div>
 
+    <!-- ====== HISTORY MODAL OVERLAY ====== -->
+    <div id="history-modal-overlay" class="history-modal-overlay">
+        <div class="history-modal-window">
+            <div class="modal-top-bar">
+                <h3><i class="fa-solid fa-trophy neon-text-gold"></i> MATCH HISTORY ARCHIVE</h3>
+                <button id="history-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="history-modal-body">
+                <div id="history-cards-container" class="history-cards-grid">
+                    <!-- dynamically rendered -->
+                </div>
+                <div id="history-empty-state" class="history-empty-state">
+                    <i class="fa-solid fa-futbol"></i>
+                    <p>No match history found. <br /> <span style="font-size:0.8rem;color:#64748b;">Add your first match via the Admin Panel → Match History tab.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== ADMIN MODAL OVERLAY ====== -->
     <div id="admin-modal-overlay" class="admin-modal-overlay">
         <div class="admin-modal-window">
-            
+
             <div class="modal-top-bar">
                 <h3><i class="fa-solid fa-user-shield neon-text-gold"></i> COMMAND CENTER</h3>
                 <button id="admin-close-btn" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
@@ -195,14 +213,14 @@
             <div id="admin-auth-screen" class="auth-wrapper modal-centered-auth">
                 <p class="auth-instruction">INPUT HIGH-PRIVILEGE SECURITY KEY TO ACCESS COMMAND PANEL.</p>
                 <div class="input-group">
-                    <input type="password" id="admin-pass" placeholder="ENTER PRIVILEGE KEY...">
+                    <input type="password" id="admin-pass" placeholder="ENTER PRIVILEGE KEY..." />
                     <button id="admin-login-btn" class="cyber-btn btn-primary">DECRYPT</button>
                 </div>
                 <div id="auth-error-msg" class="error-text" style="margin-top:10px;"></div>
             </div>
 
             <div id="admin-controls-content" class="admin-dashboard-layout" style="display: none;">
-                
+
                 <div class="admin-modal-sidebar">
                     <button class="admin-tab-link active" onclick="switchAdminTab(event, 'tab-dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-team-settings')"><i class="fa-solid fa-shirt"></i> Team Settings</button>
@@ -210,23 +228,25 @@
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-stream-settings')"><i class="fa-solid fa-tower-broadcast"></i> Stream Settings</button>
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-match-info')"><i class="fa-solid fa-trophy"></i> Match Info</button>
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-info-ticker')"><i class="fa-solid fa-closed-captioning"></i> Info & Ticker</button>
+                    <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-history')"><i class="fa-solid fa-clock-rotate-left"></i> Match History</button>
                     <button class="admin-tab-link" onclick="switchAdminTab(event, 'tab-change-password')"><i class="fa-solid fa-key"></i> Change Password</button>
                 </div>
 
                 <div class="admin-modal-content">
-                    
+
+                    <!-- ===== DASHBOARD ===== -->
                     <div id="tab-dashboard" class="admin-tab-panel active-tab">
                         <h2 class="panel-heading">Dashboard Metrics</h2>
                         <div class="matrix-score-sync-status">
                             MATRIX SCOREBOARD OVERVIEW: <span id="matrix-home-score" class="neon-text-green">0</span> - <span id="matrix-away-score" class="neon-text-green">0</span>
                         </div>
-                        
+
                         <div class="control-block-group" style="margin-top: 20px;">
                             <h4 class="group-title"><i class="fa-solid fa-image"></i> TEAM LOGOS</h4>
                             <label class="input-label">Home Team Logo URL</label>
-                            <input type="text" id="input-home-logo" placeholder="https://example.com/home-logo.png">
+                            <input type="text" id="input-home-logo" placeholder="https://example.com/home-logo.png" />
                             <label class="input-label" style="margin-top:10px;">Away Team Logo URL</label>
-                            <input type="text" id="input-away-logo" placeholder="https://example.com/away-logo.png">
+                            <input type="text" id="input-away-logo" placeholder="https://example.com/away-logo.png" />
                             <button onclick="saveLogoSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE LOGOS</button>
                         </div>
 
@@ -241,18 +261,20 @@
                         <p style="color:#94a3b8; margin-top:20px;">Welcome to the Matara Clash Live control deck. All core processes are executing normally inside the client mainframe.</p>
                     </div>
 
+                    <!-- ===== TEAM SETTINGS ===== -->
                     <div id="tab-team-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Team Settings</h2>
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-tags"></i> RENAME TEAMS</h4>
                             <label class="input-label">Home Team Name</label>
-                            <input type="text" id="input-home-team" placeholder="RAHULA">
+                            <input type="text" id="input-home-team" placeholder="RAHULA" />
                             <label class="input-label" style="margin-top:10px;">Away Team Name</label>
-                            <input type="text" id="input-away-team" placeholder="ST. THOMAS'">
+                            <input type="text" id="input-away-team" placeholder="ST. THOMAS'" />
                             <button onclick="saveTeamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE TEAM NAMES</button>
                         </div>
                     </div>
 
+                    <!-- ===== PLAYERS ===== -->
                     <div id="tab-players" class="admin-tab-panel">
                         <h2 class="panel-heading">Player Management</h2>
                         <div class="control-block-group">
@@ -268,31 +290,29 @@
                         <button onclick="savePlayerSettings()" class="cyber-btn btn-primary" style="margin-top:10px; width:100%;">SYNC SQUAD DETAILS</button>
                     </div>
 
+                    <!-- ===== STREAM SETTINGS ===== -->
                     <div id="tab-stream-settings" class="admin-tab-panel">
                         <h2 class="panel-heading">Stream Settings</h2>
-                        
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-signal"></i> SYSTEM NOTICES</h4>
                             <label class="input-label">Header Status Badge Text</label>
-                            <input type="text" id="input-stream-notice" placeholder="BIG MATCH DECK ACTIVE">
+                            <input type="text" id="input-stream-notice" placeholder="BIG MATCH DECK ACTIVE" />
                             <button onclick="saveStreamSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">UPDATE STATUS BADGE</button>
                         </div>
-
                         <div class="control-block-group" style="margin-top: 15px;">
                             <h4 class="group-title"><i class="fa-brands fa-youtube"></i> YOUTUBE LIVE EMBED</h4>
                             <label class="input-label">YouTube Live URL or Video ID</label>
-                            <input type="text" id="input-youtube-url" placeholder="https://www.youtube.com/watch?v=... or Video ID">
-                            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                                <button onclick="saveYoutubeStream()" class="cyber-btn btn-primary" style="width: 100%;">LOAD STREAM</button>
-                                <button onclick="closeYoutubeStream()" class="cyber-btn btn-small" style="width: 50%;">REMOVE</button>
+                            <input type="text" id="input-youtube-url" placeholder="https://www.youtube.com/watch?v=... or Video ID" />
+                            <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                                <button onclick="saveYoutubeStream()" class="cyber-btn btn-primary" style="flex:1; min-width:120px;">LOAD STREAM</button>
+                                <button onclick="closeYoutubeStream()" class="cyber-btn btn-small" style="flex:1; min-width:120px;">REMOVE</button>
                             </div>
                         </div>
-
                     </div>
 
+                    <!-- ===== MATCH INFO ===== -->
                     <div id="tab-match-info" class="admin-tab-panel">
                         <h2 class="panel-heading">Match Info & Controls</h2>
-                        
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-gamepad"></i> SCORE TELEMETRY</h4>
                             <div class="admin-grid-2x2">
@@ -302,7 +322,6 @@
                                 <button onclick="updateScore('away', -1)" class="control-action-btn score-sub">-1 AWAY</button>
                             </div>
                         </div>
-
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-stopwatch"></i> MATCH CLOCK METRICS</h4>
                             <div class="matrix-score-display-small">DECK CLOCK: <span id="deck-timer" class="neon-text-green">20:00</span></div>
@@ -310,12 +329,11 @@
                                 <button id="btn-clock-start" class="control-action-btn clock-start"><i class="fa-solid fa-play"></i> START TIME</button>
                                 <button id="btn-clock-pause" class="control-action-btn clock-pause"><i class="fa-solid fa-pause"></i> PAUSE TIME</button>
                             </div>
-                            <div class="input-inline-group" style="margin-top:10px;">
-                                <input type="text" id="custom-time-input" placeholder="MM:SS (e.g. 20:00)">
-                                <button id="btn-clock-set" class="cyber-btn btn-small">SET CLOCK</button>
+                            <div class="input-inline-group" style="margin-top:10px; flex-wrap:wrap;">
+                                <input type="text" id="custom-time-input" placeholder="MM:SS (e.g. 20:00)" style="flex:2; min-width:120px;" />
+                                <button id="btn-clock-set" class="cyber-btn btn-small" style="flex:1; min-width:80px;">SET CLOCK</button>
                             </div>
                         </div>
-
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-clock"></i> MATCH DURATION (ELAPSED)</h4>
                             <div class="matrix-score-display-small">ELAPSED: <span id="deck-elapsed" class="neon-text-green">00:00</span></div>
@@ -325,17 +343,17 @@
                             </div>
                             <button id="btn-elapsed-reset" class="control-action-btn" style="background:rgba(255,42,95,0.1); border-color:rgba(255,42,95,0.3); color:var(--neon-red); margin-top:5px;">RESET MATCH</button>
                         </div>
-
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-sliders"></i> INTERACTIVE INJECTORS</h4>
                             <label class="input-label">Home Ball Possession %</label>
-                            <div class="input-inline-group">
-                                <input type="number" id="input-possession" min="0" max="100" value="50">
-                                <button onclick="setPossession()" class="cyber-btn btn-small">INJECT STAT</button>
+                            <div class="input-inline-group" style="flex-wrap:wrap;">
+                                <input type="number" id="input-possession" min="0" max="100" value="50" style="flex:2; min-width:100px;" />
+                                <button onclick="setPossession()" class="cyber-btn btn-small" style="flex:1; min-width:80px;">INJECT STAT</button>
                             </div>
                         </div>
                     </div>
 
+                    <!-- ===== INFO & TICKER ===== -->
                     <div id="tab-info-ticker" class="admin-tab-panel">
                         <h2 class="panel-heading">Info & Ticker</h2>
                         <div class="control-block-group">
@@ -346,14 +364,69 @@
                         </div>
                     </div>
 
+                    <!-- ===== MATCH HISTORY (NEW) ===== -->
+                    <div id="tab-history" class="admin-tab-panel">
+                        <h2 class="panel-heading"><i class="fa-solid fa-clock-rotate-left"></i> Match History Manager</h2>
+
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-plus"></i> ADD NEW MATCH RECORD</h4>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                                <div>
+                                    <label class="input-label">Home Team</label>
+                                    <input type="text" id="history-home-team" placeholder="e.g. Rahula" />
+                                </div>
+                                <div>
+                                    <label class="input-label">Away Team</label>
+                                    <input type="text" id="history-away-team" placeholder="e.g. St. Thomas'" />
+                                </div>
+                                <div>
+                                    <label class="input-label">Home Score</label>
+                                    <input type="number" id="history-home-score" placeholder="0" min="0" />
+                                </div>
+                                <div>
+                                    <label class="input-label">Away Score</label>
+                                    <input type="number" id="history-away-score" placeholder="0" min="0" />
+                                </div>
+                                <div>
+                                    <label class="input-label">Match Date</label>
+                                    <input type="date" id="history-date" />
+                                </div>
+                                <div>
+                                    <label class="input-label">Competition</label>
+                                    <input type="text" id="history-competition" placeholder="e.g. Golden-Blue Encounter 2026" />
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <label class="input-label">Winner (optional)</label>
+                                    <input type="text" id="history-winner" placeholder="e.g. Rahula" />
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <label class="input-label">Man of the Match (optional)</label>
+                                    <input type="text" id="history-motm" placeholder="e.g. Player Name" />
+                                </div>
+                            </div>
+                            <button onclick="addHistoryEntry()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">
+                                <i class="fa-solid fa-save"></i> ARCHIVE MATCH
+                            </button>
+                            <div id="history-admin-msg" class="error-text" style="margin-top:8px;"></div>
+                        </div>
+
+                        <div class="control-block-group">
+                            <h4 class="group-title"><i class="fa-solid fa-list"></i> EXISTING RECORDS</h4>
+                            <div id="history-admin-list" style="display:flex; flex-direction:column; gap:8px; max-height:280px; overflow-y:auto; padding-right:6px;">
+                                <!-- dynamically rendered -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== CHANGE PASSWORD ===== -->
                     <div id="tab-change-password" class="admin-tab-panel">
                         <h2 class="panel-heading">Change Password</h2>
                         <div class="control-block-group">
                             <h4 class="group-title"><i class="fa-solid fa-lock"></i> MASTER DECRYPTION KEY</h4>
                             <label class="input-label">Current Master Key</label>
-                            <input type="password" id="pass-current" placeholder="ENTER CURRENT KEY">
+                            <input type="password" id="pass-current" placeholder="ENTER CURRENT KEY" />
                             <label class="input-label" style="margin-top:10px;">New Master Key</label>
-                            <input type="password" id="pass-new" placeholder="ENTER NEW KEY">
+                            <input type="password" id="pass-new" placeholder="ENTER NEW KEY" />
                             <button onclick="savePasswordSettings()" class="cyber-btn btn-primary" style="margin-top:15px; width:100%;">CHANGE PASSWORD</button>
                             <div id="pass-msg" class="error-text" style="margin-top:10px;"></div>
                         </div>
@@ -361,7 +434,7 @@
 
                 </div>
             </div>
-            
+
         </div>
     </div>
 

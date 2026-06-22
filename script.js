@@ -1252,3 +1252,203 @@ window.resetAllMatchData = function() {
     alert("✅ All match data has been reset to default values and synced to Firebase.\n\nAll connected pages will update automatically.");
     console.log("🔥 Match data reset to defaults.");
 };
+
+// ==========================================
+// 🏆 MATCH HISTORY MODULE (NEW)
+// ==========================================
+
+// --- DOM refs ---
+const historyBtn = document.getElementById('history-btn');
+const historyModalOverlay = document.getElementById('history-modal-overlay');
+const historyCloseBtn = document.getElementById('history-close-btn');
+const historyCardsContainer = document.getElementById('history-cards-container');
+const historyEmptyState = document.getElementById('history-empty-state');
+const historyAdminList = document.getElementById('history-admin-list');
+const historyAdminMsg = document.getElementById('history-admin-msg');
+
+// --- Open/Close History Modal ---
+if (historyBtn) {
+    historyBtn.addEventListener('click', () => {
+        historyModalOverlay.classList.add('open');
+        renderHistoryCards();
+    });
+}
+if (historyCloseBtn) {
+    historyCloseBtn.addEventListener('click', () => {
+        historyModalOverlay.classList.remove('open');
+    });
+}
+if (historyModalOverlay) {
+    historyModalOverlay.addEventListener('click', (e) => {
+        if (e.target === historyModalOverlay) historyModalOverlay.classList.remove('open');
+    });
+}
+
+// --- Render history cards in modal ---
+function renderHistoryCards() {
+    if (!historyCardsContainer || !historyEmptyState) return;
+    if (!window.historyData || window.historyData.length === 0) {
+        historyCardsContainer.innerHTML = '';
+        historyEmptyState.style.display = 'flex';
+        return;
+    }
+    historyEmptyState.style.display = 'none';
+    let html = '';
+    window.historyData.forEach((entry, index) => {
+        const date = entry.date || 'Unknown date';
+        const competition = entry.competition || 'Match';
+        const winner = entry.winner ? `<span style="color:var(--neon-gold);">🏆 ${entry.winner}</span>` : '';
+        const motm = entry.motm ? `<span style="color:var(--neon-green);">⭐ ${entry.motm}</span>` : '';
+        html += `
+            <div class="history-card">
+                <div class="history-card-header">
+                    <span class="history-competition">${competition}</span>
+                    <span class="history-date">${date}</span>
+                </div>
+                <div class="history-card-teams">
+                    <span class="history-team home">${entry.homeTeam || 'Home'}</span>
+                    <span class="history-score">${entry.homeScore || 0} – ${entry.awayScore || 0}</span>
+                    <span class="history-team away">${entry.awayTeam || 'Away'}</span>
+                </div>
+                <div class="history-card-footer">
+                    ${winner} ${motm}
+                </div>
+            </div>
+        `;
+    });
+    historyCardsContainer.innerHTML = html;
+}
+
+// --- Render admin list (with delete buttons) ---
+function renderAdminHistoryList() {
+    if (!historyAdminList) return;
+    if (!window.historyData || window.historyData.length === 0) {
+        historyAdminList.innerHTML = '<p style="color:#94a3b8; font-size:0.9rem;">No archived matches.</p>';
+        return;
+    }
+    let html = '';
+    window.historyData.forEach((entry, idx) => {
+        const key = entry._key || idx;
+        html += `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:8px 12px; border-radius:4px; border-left:3px solid var(--neon-gold);">
+                <span>${entry.homeTeam || 'Home'} ${entry.homeScore || 0} – ${entry.awayScore || 0} ${entry.awayTeam || 'Away'} (${entry.date || 'N/A'})</span>
+                <button onclick="deleteHistoryEntry('${key}')" class="cyber-btn btn-small" style="background:rgba(255,42,95,0.2); border-color:var(--neon-red); color:var(--neon-red); padding:2px 10px;">✕</button>
+            </div>
+        `;
+    });
+    historyAdminList.innerHTML = html;
+}
+
+// --- Add a new history entry ---
+window.addHistoryEntry = function() {
+    const homeTeam = document.getElementById('history-home-team').value.trim();
+    const awayTeam = document.getElementById('history-away-team').value.trim();
+    const homeScore = parseInt(document.getElementById('history-home-score').value) || 0;
+    const awayScore = parseInt(document.getElementById('history-away-score').value) || 0;
+    const date = document.getElementById('history-date').value || new Date().toISOString().slice(0,10);
+    const competition = document.getElementById('history-competition').value.trim() || 'Match';
+    const winner = document.getElementById('history-winner').value.trim() || '';
+    const motm = document.getElementById('history-motm').value.trim() || '';
+
+    if (!homeTeam || !awayTeam) {
+        historyAdminMsg.innerText = 'Please fill in both team names.';
+        return;
+    }
+
+    const entry = { homeTeam, awayTeam, homeScore, awayScore, date, competition, winner, motm };
+
+    if (db) {
+        const newRef = db.ref('matchHistory').push();
+        entry._key = newRef.key;
+        newRef.set(entry)
+            .then(() => {
+                historyAdminMsg.style.color = 'var(--neon-green)';
+                historyAdminMsg.innerText = '✅ Match archived successfully.';
+                document.getElementById('history-home-team').value = '';
+                document.getElementById('history-away-team').value = '';
+                document.getElementById('history-home-score').value = '';
+                document.getElementById('history-away-score').value = '';
+                document.getElementById('history-date').value = '';
+                document.getElementById('history-competition').value = '';
+                document.getElementById('history-winner').value = '';
+                document.getElementById('history-motm').value = '';
+            })
+            .catch(err => {
+                historyAdminMsg.style.color = 'var(--neon-red)';
+                historyAdminMsg.innerText = '❌ Error: ' + err.message;
+            });
+    } else {
+        if (!window.historyData) window.historyData = [];
+        window.historyData.push(entry);
+        renderHistoryCards();
+        renderAdminHistoryList();
+        historyAdminMsg.style.color = 'var(--neon-green)';
+        historyAdminMsg.innerText = '✅ Added locally (no Firebase).';
+    }
+};
+
+// --- Delete a history entry ---
+window.deleteHistoryEntry = function(key) {
+    if (!db) {
+        if (window.historyData) {
+            window.historyData = window.historyData.filter(e => e._key !== key);
+            renderHistoryCards();
+            renderAdminHistoryList();
+        }
+        return;
+    }
+    if (confirm('Delete this match record?')) {
+        db.ref('matchHistory/' + key).remove()
+            .then(() => {
+                historyAdminMsg.style.color = 'var(--neon-green)';
+                historyAdminMsg.innerText = '🗑️ Record deleted.';
+            })
+            .catch(err => {
+                historyAdminMsg.style.color = 'var(--neon-red)';
+                historyAdminMsg.innerText = '❌ Error: ' + err.message;
+            });
+    }
+};
+
+// --- Firebase listener for matchHistory ---
+if (db) {
+    db.ref('matchHistory').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            const entries = Object.keys(data).map(key => {
+                return { ...data[key], _key: key };
+            });
+            entries.sort((a, b) => (a.date || '').localeCompare(b.date || '') * -1);
+            window.historyData = entries;
+        } else {
+            window.historyData = [];
+        }
+        renderHistoryCards();
+        renderAdminHistoryList();
+    });
+} else {
+    if (!window.historyData) window.historyData = [];
+    renderHistoryCards();
+    renderAdminHistoryList();
+}
+
+// --- Patch switchAdminTab to re-render history ---
+const originalSwitch = window.switchAdminTab;
+window.switchAdminTab = function(event, tabId) {
+    if (typeof originalSwitch === 'function') {
+        originalSwitch(event, tabId);
+    } else {
+        const tabPanels = document.querySelectorAll('.admin-tab-panel');
+        tabPanels.forEach(panel => panel.classList.remove('active-tab'));
+        const tabLinks = document.querySelectorAll('.admin-tab-link');
+        tabLinks.forEach(link => link.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active-tab');
+        event.currentTarget.classList.add('active');
+    }
+    if (tabId === 'tab-history') {
+        renderAdminHistoryList();
+    }
+    if (tabId === 'tab-players') {
+        renderPlayerInputs();
+    }
+};
